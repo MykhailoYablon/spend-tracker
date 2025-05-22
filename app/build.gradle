@@ -43,10 +43,9 @@ dependencies {
 
     implementation libs.androidx.room.runtime
 
+    // ViewModel and LiveData
     implementation libs.androidx.lifecycle.viewmodel
     implementation libs.androidx.lifecycle.livedata
 
-
-    // ViewModel and LiveData
 }
 
