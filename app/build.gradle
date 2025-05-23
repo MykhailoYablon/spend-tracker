@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -30,6 +31,7 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
+    buildToolsVersion '35.0.0'
 }
 
 dependencies {
@@ -47,5 +49,8 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel
     implementation libs.androidx.lifecycle.livedata
 
+    implementation libs.chart
+
+    kapt libs.androidx.room.compiler
 }
 

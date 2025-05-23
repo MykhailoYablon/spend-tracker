@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+  <group android:scaleX="0.55"
+      android:scaleY="0.55"
+      android:translateX="22.5"
+      android:translateY="22.5">
+    <path
+        android:pathData="M95.55,17.16L46.09,17.16a1.45,1.45 0,0 0,-1.45 1.45L44.64,82a1.45,1.45 0,0 0,1.45 1.46L95.55,83.46A1.45,1.45 0,0 0,97 82L97,18.61A1.45,1.45 0,0 0,95.55 17.16ZM94.09,20.07L94.09,35.23L47.55,35.23L47.55,20.07ZM63.56,66.38L63.56,53.71L78.08,53.71L78.08,66.38ZM78.08,69.29L78.08,80.53L63.56,80.53L63.56,69.29ZM78.08,38.14L78.08,50.81L63.56,50.81L63.56,38.14ZM60.65,50.81L47.55,50.81L47.55,38.14h13.1ZM60.65,53.71L60.65,66.38L47.55,66.38L47.55,53.71ZM80.99,53.71h13.1L94.09,66.38L81,66.38ZM80.99,50.81L80.99,38.14h13.1L94.09,50.81ZM47.55,69.29h13.1L60.65,80.53L47.55,80.53ZM81,80.53L81,69.29h13.1L94.1,80.53Z">
+      <aapt:attr name="android:fillColor">
+        <gradient 
+            android:startX="44.64"
+            android:startY="50.3"
+            android:endX="97"
+            android:endY="50.3"
+            android:type="linear">
+          <item android:offset="0" android:color="#FF6CC4C7"/>
+          <item android:offset="0.81" android:color="#FF35398E"/>
+        </gradient>
+      </aapt:attr>
+    </path>
+    <path
+        android:pathData="M22,16.56a19,19 0,1 0,19 19A19,19 0,0 0,22 16.56ZM22,51.61A16.07,16.07 0,1 1,38.05 35.54,16.09 16.09,0 0,1 22,51.61Z"
+        android:fillColor="#6cc4c7"/>
+    <path
+        android:pathData="M22.49,27c2.37,0 4.29,1.62 4.29,3.61h2.91A6.73,6.73 0,0 0,24 24.21V21.7H21.13v2.48a6.73,6.73 0,0 0,-5.83 6.4,6.8 6.8,0 0,0 6.43,6.49v0c2.51,0 4.56,1.73 4.56,3.85s-2.05,3.86 -4.56,3.86S17.18,43.09 17.18,41H14.27c0,3.55 3,6.46 6.86,6.74v1.69H24v-2A6.87,6.87 0,0 0,29.19 41c0,-3.49 -2.94,-6.38 -6.7,-6.72v0c-2.36,0 -4.29,-1.62 -4.29,-3.62S20.13,27 22.49,27zM35.62,59.25H8.33a1.46,1.46 0,0 0,0 2.91H35.62a1.46,1.46 0,1 0,0 -2.91zM35.62,65.93H8.33a1.45,1.45 0,1 0,0 2.9H35.62a1.45,1.45 0,1 0,0 -2.9zM35.62,72.6H8.33a1.46,1.46 0,0 0,0 2.91H35.62a1.46,1.46 0,1 0,0 -2.91zM35.62,79.28H8.33a1.45,1.45 0,1 0,0 2.9H35.62a1.45,1.45 0,1 0,0 -2.9z"
+        android:fillColor="#6cc4c7"/>
+  </group>
+</vector>
