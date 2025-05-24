@@ -58,7 +58,7 @@ fun InvestmentSpendingCarousel(
         ) { page ->
             CarouselCard(
                 title = if (page == 0) "Investments" else "Spendings",
-                imageRes = if (page == 0) R.drawable.ic_investments else R.drawable.ic_spendings,
+                imageRes = if (page == 0) R.drawable.gold_stack else R.drawable.balance,
                 isSelected = page == pagerState.currentPage
             )
         }
