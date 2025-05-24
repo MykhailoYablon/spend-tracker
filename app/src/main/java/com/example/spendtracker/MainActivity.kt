@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
+import android.widget.CalendarView
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
@@ -24,6 +25,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         val spinner = findViewById<Spinner>(R.id.chartTypeSpinner)
         val barChart = findViewById<BarChart>(R.id.barChart)
+        val pieChart = findViewById<PieChart>(R.id.pieChart)
         adapter = TransactionAdapter(emptyList())
 
         viewModel = ViewModelProvider(this)[TransactionViewModel::class.java]
@@ -57,9 +60,9 @@ class MainActivity : AppCompatActivity() {
             ) {
                 val selected = parent.getItemAtPosition(position) as String
                 when (selected) {
-                    "Daily" -> updateBarChartGrouped(transactions, "dd MMM")
-                    "Monthly" -> updateBarChartGrouped(transactions, "MMM yyyy")
-                    "Yearly" -> updateBarChartGrouped(transactions, "yyyy")
+                    "Daily" -> updateChart(transactions, pieChart)
+                    "Monthly" -> updateChart(transactions, pieChart)
+                    "Yearly" -> updateChart(transactions, pieChart)
                 }
             }
 
@@ -82,12 +85,21 @@ class MainActivity : AppCompatActivity() {
                     dialogView.findViewById<EditText>(R.id.editAmount).text.toString().toDouble()
                 val category = dialogView.findViewById<EditText>(R.id.editCategory).text.toString()
                 val note = dialogView.findViewById<EditText>(R.id.editNote).text.toString()
+                val transactionDate = dialogView.findViewById<CalendarView>(R.id.calendarView)
+
+                var selectedDate = System.currentTimeMillis() // default is today
+
+                transactionDate.setOnDateChangeListener { _, year, month, dayOfMonth ->
+                    val calendar = Calendar.getInstance()
+                    calendar.set(year, month, dayOfMonth)
+                    selectedDate = calendar.timeInMillis
+                }
 
                 val transaction = Transaction(
                     amount = amount,
                     category = category,
                     note = note,
-                    date = System.currentTimeMillis()
+                    date = selectedDate
                 )
                 viewModel.insert(transaction)
             }
