@@ -1,30 +1,18 @@
 package com.example.spendtracker.ds
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.spendtracker.dao.TransactionDao
-import com.example.spendtracker.model.Transaction
+import com.example.spendtracker.dao.InvestmentDao
+import com.example.spendtracker.dao.SpendingDao
+import com.example.spendtracker.model.Investment
+import com.example.spendtracker.model.Spending
 
-@Database(entities = [Transaction::class], version = 1)
+@Database(
+    entities = [Investment::class, Spending::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun transactionDao(): TransactionDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-
-        fun getDatabase(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "spend_tracker_db"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
+    abstract fun investmentDao(): InvestmentDao
+    abstract fun spendingDao(): SpendingDao
 }

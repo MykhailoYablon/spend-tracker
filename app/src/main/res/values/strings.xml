@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">SpendTracker</string>
     <string name="add_transaction">Add Transaction</string>
     <string-array name="chart_types">
         <item>Daily</item>
         <item>Monthly</item>
         <item>Yearly</item>
     </string-array>
+    <string name="app_name">Investment Tracker</string>
 </resources>
