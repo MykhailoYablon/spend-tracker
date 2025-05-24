@@ -11,6 +11,7 @@ class Repository(
     private val spendingDao: SpendingDao
 ) {
     fun getAllInvestments(): Flow<List<Investment>> = investmentDao.getAllInvestments()
+    fun getInvestmentDetails(id: Long): Flow<Investment> = investmentDao.getInvestmentDetails(id)
     fun getAllSpendings(): Flow<List<Spending>> = spendingDao.getAllSpendings()
 
     suspend fun insertInvestment(investment: Investment) = investmentDao.insertInvestment(investment)

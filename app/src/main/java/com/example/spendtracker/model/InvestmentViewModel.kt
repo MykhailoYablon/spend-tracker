@@ -9,6 +9,10 @@ class InvestmentViewModel(private val repository: Repository) : androidx.lifecyc
         repository.insertInvestment(Investment(name = name, category = category, amount = amount))
     }
 
+    suspend fun getInvestmentDetails(id: Long) {
+        repository.getInvestmentDetails(id)
+    }
+
     suspend fun deleteInvestment(investment: Investment) {
         repository.deleteInvestment(investment)
     }
