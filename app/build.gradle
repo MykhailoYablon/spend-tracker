@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -36,21 +37,37 @@ android {
 
 dependencies {
 
-    implementation libs.androidx.core.ktx
-    implementation libs.androidx.appcompat
+    // Use the Compose BOM for version alignment
+    implementation libs.androidx.compose.bom
+
+    // Core Compose dependencies
+    implementation libs.androidx.ui
+    implementation libs.androidx.ui.tooling.preview
+    implementation libs.androidx.foundation
     implementation libs.material
-    testImplementation libs.junit
-    androidTestImplementation libs.androidx.junit
-    androidTestImplementation libs.androidx.espresso.core
 
+    // Activity Compose - use this exact version
+    implementation libs.androidx.activity.compose
+
+    // Compose runtime - critical for remember functions
+    implementation libs.androidx.runtime
+    implementation libs.androidx.runtime.livedata
+
+    // Lifecycle
+    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.androidx.lifecycle.runtime.ktx
+
+    // Room
     implementation libs.androidx.room.runtime
-
-    // ViewModel and LiveData
-    implementation libs.androidx.lifecycle.viewmodel
-    implementation libs.androidx.lifecycle.livedata
-
-    implementation libs.chart
-
+    implementation libs.androidx.room.ktx
+    implementation libs.androidx.material3.android
+    implementation libs.androidx.material
+    implementation libs.androidx.junit.ktx
+    implementation libs.androidx.navigation.compose.jvmstubs
     kapt libs.androidx.room.compiler
+
+    // Kotlin
+    implementation libs.androidx.core.ktx
+
 }
 
