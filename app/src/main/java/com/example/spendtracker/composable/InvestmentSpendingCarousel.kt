@@ -24,7 +24,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,7 +35,8 @@ import com.example.spendtracker.repository.Repository
 fun InvestmentSpendingCarousel(
     selectedTab: Int,
     onTabChanged: (Int) -> Unit,
-    repository: Repository
+    repository: Repository,
+    onNavigateToInvestmentGraphs: () -> Unit,
 ) {
     val pagerState = rememberPagerState(
         initialPage = selectedTab,
@@ -92,7 +92,7 @@ fun InvestmentSpendingCarousel(
 
         // Content based on selected page
         when (pagerState.currentPage) {
-            0 -> InvestmentScreen(repository)
+            0 -> InvestmentScreen(repository, onNavigateToGraphs = onNavigateToInvestmentGraphs)
             1 -> SpendingScreen(repository)
         }
     }

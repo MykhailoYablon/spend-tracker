@@ -37,12 +37,18 @@ import com.example.spendtracker.repository.Repository
 import kotlinx.coroutines.launch
 
 @Composable
-fun InvestmentScreen(repository: Repository) {
+fun InvestmentScreen(
+    repository: Repository,
+    onNavigateToGraphs: () -> Unit
+) {
     var showDialog by remember { mutableStateOf(false) }
     val investments by repository.getAllInvestments().collectAsState(initial = emptyList())
     val coroutineScope = rememberCoroutineScope()
 
     var investmentToEdit by remember { mutableStateOf<Investment?>(null) }
+
+    val totalAmount = investments.sumOf { it.amount }
+    val totalCount = investments.size
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -51,34 +57,13 @@ fun InvestmentScreen(repository: Repository) {
                 .padding(16.dp)
         ) {
             // Summary Card
-            OutlinedCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                border = BorderStroke(1.dp, Color.Black),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                ),
-                elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
 
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        "Total Investments",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                    Text(
-                        "$${investments.sumOf { it.amount }}",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-            }
+                TotalInvestmentsCard(
+                    totalAmount = totalAmount,
+                    totalCount = totalCount,
+                    onGraphClick = onNavigateToGraphs
+                )
+            
 
             HorizontalDivider(
                 color = MaterialTheme.colorScheme.primaryContainer

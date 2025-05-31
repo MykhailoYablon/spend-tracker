@@ -9,8 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -19,43 +21,65 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
+import com.example.spendtracker.model.Investment
 import com.example.spendtracker.repository.Repository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InvestmentTrackerApp(repository: Repository) {
     var selectedTab by remember { mutableIntStateOf(0) }
+    var showGraphs by remember { mutableStateOf(false) }
+    var investments by remember { mutableStateOf(emptyList<Investment>()) }
 
-    Column {
-        // Top App Bar
-        TopAppBar(
-            title = {
-                Text(
-                    "Financial Tracker",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center
-                )
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color(0xFF1E3A8A),
-                titleContentColor = Color.White
-            )
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(brush = getSharedGradient())
-        ) {
-            InvestmentSpendingCarousel(
-                selectedTab = selectedTab,
-                onTabChanged = { selectedTab = it },
-                repository = repository
-            )
+    // Collect investments for the graphs
+    LaunchedEffect(Unit) {
+        repository.getAllInvestments().collect { investmentList ->
+            investments = investmentList
         }
     }
+    if (showGraphs) {
+        // Show the graphs screen
+        InvestmentGraphsScreen(
+            investments = investments,
+            onBackClick = { showGraphs = false }
+        )
+    } else {
+        Column {
+            // Top App Bar
+            TopAppBar(
+                title = {
+                    Text(
+                        "Financial Tracker",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFF1E3A8A),
+                    titleContentColor = Color.White
+                )
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(brush = getSharedGradient())
+            ) {
+                InvestmentSpendingCarousel(
+                    selectedTab = selectedTab,
+                    onTabChanged = { selectedTab = it },
+                    repository = repository,
+                    onNavigateToInvestmentGraphs = { showGraphs = true }
+                )
+            }
+        }
+    }
+
 }
+
+
 
 @Composable
 fun getSharedGradient() = Brush.verticalGradient(
