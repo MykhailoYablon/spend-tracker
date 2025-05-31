@@ -78,6 +78,7 @@ fun InvestmentScreen(repository: Repository) {
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
+            }
 
             HorizontalDivider(
                 color = MaterialTheme.colorScheme.primaryContainer
