@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -74,6 +75,10 @@ fun SpendingScreen(repository: Repository) {
                 }
             }
 
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.primaryContainer
+            )
+
             // Spendings List
             if (spendings.isEmpty()) {
                 Box(
@@ -85,12 +90,12 @@ fun SpendingScreen(repository: Repository) {
                             Icons.Default.ShoppingCart,
                             contentDescription = null,
                             modifier = Modifier.size(64.dp),
-                            tint = MaterialTheme.colorScheme.outline
+                            tint = Color.White
                         )
                         Text(
                             "No spendings yet",
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.outline,
+                            color = Color.White,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(top = 8.dp)
                         )
@@ -110,8 +115,8 @@ fun SpendingScreen(repository: Repository) {
             onClick = { showDialog = true },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(16.dp),
-            containerColor = MaterialTheme.colorScheme.error
+                .padding(36.dp),
+            containerColor = MaterialTheme.colorScheme.primary
         ) {
             Icon(Icons.Default.Add, contentDescription = "Add Spending", tint = Color.White)
         }
