@@ -46,6 +46,9 @@ dependencies {
     implementation libs.androidx.foundation
     implementation libs.material
 
+    implementation libs.chart
+    implementation libs.androidx.navigation.compose
+
     // Activity Compose - use this exact version
     implementation libs.androidx.activity.compose
 
@@ -63,7 +66,6 @@ dependencies {
     implementation libs.androidx.material3.android
     implementation libs.androidx.material
     implementation libs.androidx.junit.ktx
-    implementation libs.androidx.navigation.compose.jvmstubs
     kapt libs.androidx.room.compiler
 
     // Kotlin

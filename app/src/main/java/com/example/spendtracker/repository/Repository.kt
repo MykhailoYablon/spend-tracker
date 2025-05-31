@@ -1,5 +1,6 @@
 package com.example.spendtracker.repository
 
+import androidx.room.Update
 import com.example.spendtracker.dao.InvestmentDao
 import com.example.spendtracker.dao.SpendingDao
 import com.example.spendtracker.model.Investment
@@ -16,6 +17,8 @@ class Repository(
 
     suspend fun insertInvestment(investment: Investment) = investmentDao.insertInvestment(investment)
     suspend fun insertSpending(spending: Spending) = spendingDao.insertSpending(spending)
+
+    suspend fun updateInvestment(investment: Investment) = investmentDao.updateInvestment(investment)
 
     suspend fun deleteInvestment(investment: Investment) = investmentDao.deleteInvestment(investment)
     suspend fun deleteSpending(spending: Spending) = spendingDao.deleteSpending(spending)

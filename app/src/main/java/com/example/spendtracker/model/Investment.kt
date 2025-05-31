@@ -2,6 +2,7 @@ package com.example.spendtracker.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDate
 
 @Entity(tableName = "investments")
 data class Investment(

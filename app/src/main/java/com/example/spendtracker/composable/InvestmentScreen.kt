@@ -1,7 +1,6 @@
 package com.example.spendtracker.composable
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,12 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -38,10 +37,18 @@ import com.example.spendtracker.repository.Repository
 import kotlinx.coroutines.launch
 
 @Composable
-fun InvestmentScreen(repository: Repository) {
+fun InvestmentScreen(
+    repository: Repository,
+    onNavigateToGraphs: () -> Unit
+) {
     var showDialog by remember { mutableStateOf(false) }
     val investments by repository.getAllInvestments().collectAsState(initial = emptyList())
     val coroutineScope = rememberCoroutineScope()
+
+    var investmentToEdit by remember { mutableStateOf<Investment?>(null) }
+
+    val totalAmount = investments.sumOf { it.amount }
+    val totalCount = investments.size
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -50,44 +57,16 @@ fun InvestmentScreen(repository: Repository) {
                 .padding(16.dp)
         ) {
             // Summary Card
-            OutlinedCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-//                    .clickable()
-                    .padding(bottom = 16.dp),
-                border = BorderStroke(1.dp, Color.Black),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                ),
-                elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
 
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        "Total Investments",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                    Text(
-                        "$${investments.sumOf { it.amount }}",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-//                // Content based on selected tab
-//                when (selectedTab) {
-//                    0 -> InvestmentScreen(repository)
-//                    1 -> SpendingScreen(repository)
-//                    2 -> TestScreen()
-//                }
-            }
-            Divider(
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                TotalInvestmentsCard(
+                    totalAmount = totalAmount,
+                    totalCount = totalCount,
+                    onGraphClick = onNavigateToGraphs
+                )
+            
 
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.primaryContainer
             )
 
             // Investments List
@@ -101,12 +80,12 @@ fun InvestmentScreen(repository: Repository) {
                             Icons.Default.Build,
                             contentDescription = null,
                             modifier = Modifier.size(64.dp),
-                            tint = MaterialTheme.colorScheme.outline
+                            tint = MaterialTheme.colorScheme.primaryContainer
                         )
                         Text(
                             "No investments yet",
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.outline,
+                            color = MaterialTheme.colorScheme.primaryContainer,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(top = 8.dp)
                         )
@@ -115,10 +94,38 @@ fun InvestmentScreen(repository: Repository) {
             } else {
                 LazyColumn {
                     items(investments) { investment ->
-                        InvestmentItem(investment = investment)
+                        InvestmentItem(
+                            investment = investment,
+                            onEdit = {
+                                investmentToEdit = it // This opens the edit dialog
+                            },
+                            onDelete = {
+                                coroutineScope.launch {
+                                    repository.deleteInvestment(it)
+                                }
+                            })
                     }
                 }
             }
+        }
+
+        // Edit Investment Dialog
+        investmentToEdit?.let { investment ->
+            InvestmentDialog(
+                investment = investment, // Pass the investment to edit
+                onDismiss = { investmentToEdit = null },
+                onSave = { name, category, amount ->
+                    val updatedInvestment = investment.copy(
+                        name = name,
+                        category = category,
+                        amount = amount
+                    )
+                    coroutineScope.launch {
+                        repository.updateInvestment(updatedInvestment)
+                    }
+                    investmentToEdit = null
+                }
+            )
         }
 
         // Floating Action Button
