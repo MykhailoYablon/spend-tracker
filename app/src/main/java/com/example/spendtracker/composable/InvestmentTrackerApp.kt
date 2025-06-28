@@ -17,27 +17,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.example.spendtracker.model.Investment
+import com.example.spendtracker.model.InvestmentViewModel
+import com.example.spendtracker.model.SpendingViewModel
 import com.example.spendtracker.repository.Repository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InvestmentTrackerApp(repository: Repository) {
+fun InvestmentTrackerApp(
+    investmentViewModel: InvestmentViewModel,
+    spendingViewModel: SpendingViewModel
+) {
     var selectedTab by remember { mutableIntStateOf(0) }
     var showGraphs by remember { mutableStateOf(false) }
     var investments by remember { mutableStateOf(emptyList<Investment>()) }
 
     // Collect investments for the graphs
     LaunchedEffect(Unit) {
-        repository.getAllInvestments().collect { investmentList ->
+        investmentViewModel.investments.collect { investmentList ->
             investments = investmentList
         }
     }
+    
     if (showGraphs) {
         // Show the graphs screen
         InvestmentGraphsScreen(
@@ -57,8 +62,8 @@ fun InvestmentTrackerApp(repository: Repository) {
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF1E3A8A),
-                    titleContentColor = Color.White
+                    containerColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                    titleContentColor = androidx.compose.material3.MaterialTheme.colorScheme.onPrimary
                 )
             )
 
@@ -70,22 +75,20 @@ fun InvestmentTrackerApp(repository: Repository) {
                 InvestmentSpendingCarousel(
                     selectedTab = selectedTab,
                     onTabChanged = { selectedTab = it },
-                    repository = repository,
+                    investmentViewModel = investmentViewModel,
+                    spendingViewModel = spendingViewModel,
                     onNavigateToInvestmentGraphs = { showGraphs = true }
                 )
             }
         }
     }
-
 }
-
-
 
 @Composable
 fun getSharedGradient() = Brush.verticalGradient(
     colors = listOf(
-        Color(0xFF1E3A8A), // Dark blue
-        Color(0xFF3B82F6), // Lighter blue
-        Color(0xFF8B5CF6)  // Purple
+        androidx.compose.material3.MaterialTheme.colorScheme.primary,
+        androidx.compose.material3.MaterialTheme.colorScheme.secondary,
+        androidx.compose.material3.MaterialTheme.colorScheme.tertiary
     )
 )
