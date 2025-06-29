@@ -72,9 +72,15 @@ fun InvestmentGraphsScreen(
                     )
                 }
             },
+            actions = {
+                ThemeToggle(
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+            },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color(0xFF1E3A8A),
-                titleContentColor = Color.White
+                titleContentColor = Color.White,
+                actionIconContentColor = Color.White
             )
         )
 

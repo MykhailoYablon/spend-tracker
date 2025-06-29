@@ -3,9 +3,6 @@ package com.example.spendtracker
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.example.spendtracker.composable.InvestmentTrackerApp
@@ -13,6 +10,8 @@ import com.example.spendtracker.ds.AppDatabase
 import com.example.spendtracker.model.InvestmentViewModel
 import com.example.spendtracker.model.SpendingViewModel
 import com.example.spendtracker.repository.Repository
+import com.example.spendtracker.theme.AppTheme
+import com.example.spendtracker.theme.ThemeManager
 
 class MainActivity : ComponentActivity() {
 
@@ -36,17 +35,21 @@ class MainActivity : ComponentActivity() {
         SpendingViewModel(repository)
     }
 
+    private val themeManager by lazy {
+        ThemeManager(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
+            AppTheme(themeManager = themeManager) {
                 InvestmentTrackerApp(
                     investmentViewModel = investmentViewModel,
                     spendingViewModel = spendingViewModel
                 )
             }
         }
-        val controller = WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView())
-        controller.hide(WindowInsetsCompat.Type.systemBars())
+        val controller = androidx.core.view.WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView())
+        controller.hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
     }
 }
