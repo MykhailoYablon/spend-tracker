@@ -33,7 +33,7 @@ class SpendingViewModel(private val repository: Repository) : ViewModel() {
         )
     }
     
-    fun addSpending(name: String, category: String, amount: String) {
+    fun addSpending(name: String, category: String, amount: Double) {
         if (!validateInput(name, amount)) {
             return
         }
@@ -71,14 +71,10 @@ class SpendingViewModel(private val repository: Repository) : ViewModel() {
         }
     }
     
-    private fun validateInput(name: String, amount: String): Boolean {
+    private fun validateInput(name: String, amount: Double): Boolean {
         return when {
             name.isBlank() -> {
                 _uiState.value = _uiState.value.copy(errorMessage = AppConstants.ERROR_EMPTY_NAME)
-                false
-            }
-            amount.toDoubleOrNull() == null -> {
-                _uiState.value = _uiState.value.copy(errorMessage = AppConstants.ERROR_INVALID_AMOUNT)
                 false
             }
             amount.toDouble() <= 0 -> {
