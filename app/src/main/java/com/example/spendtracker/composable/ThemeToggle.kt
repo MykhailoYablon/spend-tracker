@@ -22,8 +22,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.Brightness4
+import androidx.compose.material.icons.filled.Brightness7
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -90,8 +90,8 @@ private fun SimpleThemeToggle(
     ) {
         Icon(
             imageVector = when (themeManager.currentThemeMode) {
-                ThemeMode.LIGHT -> Icons.Default.LightMode
-                ThemeMode.DARK -> Icons.Default.DarkMode
+                ThemeMode.LIGHT -> Icons.Default.Brightness7
+                ThemeMode.DARK -> Icons.Default.Brightness4
                 ThemeMode.SYSTEM -> Icons.Default.Settings
             },
             contentDescription = "Toggle theme",
@@ -125,8 +125,8 @@ private fun ThemeDropdown(
             ) {
                 Icon(
                     imageVector = when (themeManager.currentThemeMode) {
-                        ThemeMode.LIGHT -> Icons.Default.LightMode
-                        ThemeMode.DARK -> Icons.Default.DarkMode
+                        ThemeMode.LIGHT -> Icons.Default.Brightness7
+                        ThemeMode.DARK -> Icons.Default.Brightness4
                         ThemeMode.SYSTEM -> Icons.Default.Settings
                     },
                     contentDescription = null,
@@ -166,8 +166,8 @@ private fun ThemeDropdown(
                         ) {
                             Icon(
                                 imageVector = when (themeMode) {
-                                    ThemeMode.LIGHT -> Icons.Default.LightMode
-                                    ThemeMode.DARK -> Icons.Default.DarkMode
+                                    ThemeMode.LIGHT -> Icons.Default.Brightness7
+                                    ThemeMode.DARK -> Icons.Default.Brightness4
                                     ThemeMode.SYSTEM -> Icons.Default.Settings
                                 },
                                 contentDescription = null,
@@ -230,7 +230,7 @@ fun AnimatedThemeToggle(
             exit = fadeOut() + slideOutVertically()
         ) {
             Icon(
-                imageVector = Icons.Default.LightMode,
+                imageVector = Icons.Default.Brightness7,
                 contentDescription = "Light mode",
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(24.dp)
@@ -244,7 +244,7 @@ fun AnimatedThemeToggle(
             exit = fadeOut() + slideOutVertically()
         ) {
             Icon(
-                imageVector = Icons.Default.DarkMode,
+                imageVector = Icons.Default.Brightness4,
                 contentDescription = "Dark mode",
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(24.dp)

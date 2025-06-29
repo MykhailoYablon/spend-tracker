@@ -17,10 +17,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.Brightness4
+import androidx.compose.material.icons.filled.Brightness7
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.SettingsBrightness
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -96,7 +95,7 @@ fun SettingsScreen(
                         modifier = Modifier.padding(bottom = 16.dp)
                     ) {
                         Icon(
-                            Icons.Default.SettingsBrightness,
+                            Icons.Default.Settings,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(24.dp)
@@ -143,8 +142,8 @@ fun SettingsScreen(
                             ) {
                                 Icon(
                                     imageVector = when (themeMode) {
-                                        ThemeMode.LIGHT -> Icons.Default.LightMode
-                                        ThemeMode.DARK -> Icons.Default.DarkMode
+                                        ThemeMode.LIGHT -> Icons.Default.Brightness7
+                                        ThemeMode.DARK -> Icons.Default.Brightness4
                                         ThemeMode.SYSTEM -> Icons.Default.Settings
                                     },
                                     contentDescription = null,
