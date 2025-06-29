@@ -108,7 +108,7 @@ fun SpendingScreen(viewModel: SpendingViewModel) {
                     ) { spending ->
                         SpendingItem(
                             spending = spending,
-                            onDelete = { viewModel.deleteSpending(it) }
+                            onDelete = { viewModel.deleteSpending(spending) }
                         )
                     }
                 }
