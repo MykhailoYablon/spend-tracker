@@ -29,14 +29,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.spendtracker.R
-import com.example.spendtracker.repository.Repository
+import com.example.spendtracker.model.InvestmentViewModel
+import com.example.spendtracker.model.SpendingViewModel
+import com.example.spendtracker.util.AppConstants
 
 @Composable
 fun InvestmentSpendingCarousel(
     selectedTab: Int,
     onTabChanged: (Int) -> Unit,
-    repository: Repository,
+    investmentViewModel: InvestmentViewModel,
+    spendingViewModel: SpendingViewModel,
     onNavigateToInvestmentGraphs: () -> Unit,
+    onNavigateToSpendingGraphs: () -> Unit
 ) {
     val pagerState = rememberPagerState(
         initialPage = selectedTab,
@@ -58,7 +62,7 @@ fun InvestmentSpendingCarousel(
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
+                .height(AppConstants.CAROUSEL_HEIGHT.dp),
         ) { page ->
             CarouselCard(
                 title = if (page == 0) "Investments" else "Spendings",
@@ -71,13 +75,13 @@ fun InvestmentSpendingCarousel(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(AppConstants.DEFAULT_PADDING.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             repeat(2) { index ->
                 Box(
                     modifier = Modifier
-                        .size(8.dp)
+                        .size(AppConstants.PAGE_INDICATOR_SIZE.dp)
                         .clip(CircleShape)
                         .background(
                             if (index == pagerState.currentPage)
@@ -85,15 +89,22 @@ fun InvestmentSpendingCarousel(
                             else
                                 MaterialTheme.colorScheme.outline
                         )
-                        .padding(horizontal = 4.dp)
+                        .padding(horizontal = AppConstants.SMALL_PADDING.dp)
                 )
             }
         }
 
         // Content based on selected page
         when (pagerState.currentPage) {
-            0 -> InvestmentScreen(repository, onNavigateToGraphs = onNavigateToInvestmentGraphs)
-            1 -> SpendingScreen(repository)
+            0 -> InvestmentScreen(
+                investmentViewModel,
+                onNavigateToGraphs = onNavigateToInvestmentGraphs
+            )
+
+            1 -> SpendingScreen(
+                spendingViewModel,
+                onNavigateToGraphs = onNavigateToSpendingGraphs
+            )
         }
     }
 }
@@ -107,9 +118,12 @@ fun CarouselCard(
     Card(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(
+                horizontal = AppConstants.DEFAULT_PADDING.dp,
+                vertical = AppConstants.SMALL_PADDING.dp
+            ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = if (isSelected) 8.dp else 4.dp
+            defaultElevation = if (isSelected) AppConstants.CARD_SELECTED_ELEVATION.dp else AppConstants.CARD_ELEVATION.dp
         ),
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected)
@@ -128,14 +142,14 @@ fun CarouselCard(
             ) {
                 Image(
                     painter = painterResource(id = imageRes),
-                    contentDescription = title,
+                    contentDescription = "Icon for $title",
                     modifier = Modifier
-                        .size(80.dp)
+                        .size(AppConstants.CAROUSEL_IMAGE_SIZE.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(AppConstants.DEFAULT_PADDING.dp))
 
                 Text(
                     text = title,

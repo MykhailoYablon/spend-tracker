@@ -15,16 +15,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.spendtracker.model.Investment
+import com.example.spendtracker.model.Graph
 
 @Composable
-fun InvestmentSummary(
-    investments: List<Investment>,
+fun <T : Graph> GraphSummary(
+    items: List<T>,
     modifier: Modifier = Modifier
 ) {
-    val totalAmount = investments.sumOf { it.amount }
-    val groupCounts = investments.groupBy { it.category }.mapValues { it.value.size }
-    val averageInvestment = if (investments.isNotEmpty()) totalAmount / investments.size else 0.0
+    val totalAmount = items.sumOf { it.amount }
+    val groupCounts = items.groupBy { it.category }.mapValues { it.value.size }
+    val average = if (items.isNotEmpty()) totalAmount / items.size else 0.0
 
     Card(
         modifier = modifier,
@@ -54,9 +54,9 @@ fun InvestmentSummary(
                     )
                 }
                 Column {
-                    Text("Total Investments", style = MaterialTheme.typography.bodySmall)
+                    Text("Total ", style = MaterialTheme.typography.bodySmall)
                     Text(
-                        "${investments.size}",
+                        "${items.size}",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold
                     )
@@ -64,7 +64,7 @@ fun InvestmentSummary(
                 Column {
                     Text("Average", style = MaterialTheme.typography.bodySmall)
                     Text(
-                        "$${String.format("%.2f", averageInvestment)}",
+                        "$${String.format("%.2f", average)}",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold
                     )

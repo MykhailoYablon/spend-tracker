@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TotalInvestmentsCard(
+fun TotalSpendingCard(
     totalAmount: Double,
     totalCount: Int,
     onGraphClick: () -> Unit
@@ -51,7 +51,7 @@ fun TotalInvestmentsCard(
         ) {
             Column {
                 Text(
-                    text = "Total Investments",
+                    text = "Total Spending",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -63,7 +63,7 @@ fun TotalInvestmentsCard(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "$totalCount investments",
+                    text = "$totalCount spending",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

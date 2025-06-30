@@ -1,4 +1,4 @@
-package com.example.spendtracker.composable
+package com.example.spendtracker.composable.graph
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.spendtracker.enums.SortOption
+import com.example.spendtracker.model.Graph
 import com.example.spendtracker.model.Investment
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
@@ -16,20 +17,21 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
 @Composable
-fun BarChartView(
-    investments: List<Investment>,
+fun <T : Graph> BarChartView(
+    items: List<T>,
     sortOption: SortOption,
     modifier: Modifier = Modifier
 ) {
-    val chartData = remember(investments, sortOption) {
+    val chartData = remember(items, sortOption) {
         when (sortOption) {
             SortOption.CATEGORY -> {
-                investments.groupBy { it.category }
+                items.groupBy { it.category }
                     .mapValues { (_, investments) -> investments.sumOf { it.amount } }
                     .toList()
             }
+
             else -> {
-                investments.groupBy { it.date.toString() }
+                items.groupBy { it.date.toString() }
                     .mapValues { (_, investments) -> investments.sumOf { it.amount } }
                     .toList()
                     .take(10) // Limit to recent 10 entries for readability

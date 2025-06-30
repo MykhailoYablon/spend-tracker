@@ -1,10 +1,8 @@
 package com.example.spendtracker.composable
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,40 +10,33 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Build
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.spendtracker.model.Investment
-import com.example.spendtracker.repository.Repository
-import kotlinx.coroutines.launch
+import com.example.spendtracker.model.InvestmentViewModel
+import com.example.spendtracker.util.AppConstants
 
 @Composable
 fun InvestmentScreen(
-    repository: Repository,
+    viewModel: InvestmentViewModel,
     onNavigateToGraphs: () -> Unit
 ) {
-    var showDialog by remember { mutableStateOf(false) }
-    val investments by repository.getAllInvestments().collectAsState(initial = emptyList())
-    val coroutineScope = rememberCoroutineScope()
-
-    var investmentToEdit by remember { mutableStateOf<Investment?>(null) }
+    val investments by viewModel.investments.collectAsState(initial = emptyList())
+    val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val totalAmount = investments.sumOf { it.amount }
     val totalCount = investments.size
@@ -54,19 +45,18 @@ fun InvestmentScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(AppConstants.DEFAULT_PADDING.dp)
         ) {
             // Summary Card
-
-                TotalInvestmentsCard(
-                    totalAmount = totalAmount,
-                    totalCount = totalCount,
-                    onGraphClick = onNavigateToGraphs
-                )
-            
+            TotalInvestmentsCard(
+                totalAmount = totalAmount,
+                totalCount = totalCount,
+                onGraphClick = onNavigateToGraphs
+            )
 
             HorizontalDivider(
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.padding(vertical = AppConstants.SMALL_PADDING.dp)
             )
 
             // Investments List
@@ -78,8 +68,8 @@ fun InvestmentScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
                             Icons.Default.Build,
-                            contentDescription = null,
-                            modifier = Modifier.size(64.dp),
+                            contentDescription = "No investments icon",
+                            modifier = Modifier.size(AppConstants.ICON_SIZE.dp),
                             tint = MaterialTheme.colorScheme.primaryContainer
                         )
                         Text(
@@ -87,70 +77,74 @@ fun InvestmentScreen(
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.primaryContainer,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(top = 8.dp)
+                            modifier = Modifier.padding(top = AppConstants.SMALL_PADDING.dp)
                         )
                     }
                 }
             } else {
                 LazyColumn {
-                    items(investments) { investment ->
+                    items(
+                        items = investments,
+                        key = { it.id }
+                    ) { investment ->
                         InvestmentItem(
                             investment = investment,
-                            onEdit = {
-                                investmentToEdit = it // This opens the edit dialog
-                            },
-                            onDelete = {
-                                coroutineScope.launch {
-                                    repository.deleteInvestment(it)
-                                }
-                            })
+                            onEdit = { viewModel.editInvestment(it) },
+                            onDelete = { viewModel.deleteInvestment(it) }
+                        )
                     }
                 }
             }
         }
 
         // Edit Investment Dialog
-        investmentToEdit?.let { investment ->
+        uiState.investmentToEdit?.let { investment ->
             InvestmentDialog(
-                investment = investment, // Pass the investment to edit
-                onDismiss = { investmentToEdit = null },
+                investment = investment,
+                onDismiss = { viewModel.hideDialog() },
                 onSave = { name, category, amount ->
-                    val updatedInvestment = investment.copy(
-                        name = name,
-                        category = category,
-                        amount = amount
-                    )
-                    coroutineScope.launch {
-                        repository.updateInvestment(updatedInvestment)
-                    }
-                    investmentToEdit = null
+                    viewModel.updateInvestment(investment, name, category, amount)
+                }
+            )
+        }
+
+        // Add Investment Dialog
+        if (uiState.showDialog) {
+            AddInvestmentDialog(
+                onDismiss = { viewModel.hideDialog() },
+                onAdd = { name, category, amount ->
+                    viewModel.addInvestment(name, category, amount)
                 }
             )
         }
 
         // Floating Action Button
         FloatingActionButton(
-            onClick = { showDialog = true },
+            onClick = { viewModel.showAddDialog() },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(36.dp),
+                .padding(AppConstants.FAB_PADDING.dp),
             containerColor = MaterialTheme.colorScheme.primary
         ) {
-            Icon(Icons.Default.Add, contentDescription = "Add Investment", tint = Color.White)
+            Icon(
+                Icons.Default.Add,
+                contentDescription = "Add Investment",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
         }
+
+        // Snackbar for error messages
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 
-    if (showDialog) {
-        AddInvestmentDialog(
-            onDismiss = { showDialog = false },
-            onAdd = { name, category, amount ->
-                coroutineScope.launch {
-                    repository.insertInvestment(
-                        Investment(name = name, category = category, amount = amount)
-                    )
-                }
-                showDialog = false
-            }
-        )
+    // Show error messages
+    uiState.errorMessage?.let { errorMessage ->
+        LaunchedEffect(errorMessage) {
+            snackbarHostState.showSnackbar(errorMessage)
+            viewModel.clearError()
+        }
     }
 }
