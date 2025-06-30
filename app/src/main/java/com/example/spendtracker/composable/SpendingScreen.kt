@@ -3,7 +3,6 @@ package com.example.spendtracker.composable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,8 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -27,17 +24,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.spendtracker.model.SpendingViewModel
 import com.example.spendtracker.util.AppConstants
 
 @Composable
-fun SpendingScreen(viewModel: SpendingViewModel) {
+fun SpendingScreen(
+    viewModel: SpendingViewModel,
+    onNavigateToGraphs: () -> Unit
+) {
     val spendings by viewModel.spendings.collectAsState(initial = emptyList())
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    val totalAmount = spendings.sumOf { it.amount }
+    val totalCount = spendings.size
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -46,32 +48,11 @@ fun SpendingScreen(viewModel: SpendingViewModel) {
                 .padding(AppConstants.DEFAULT_PADDING.dp)
         ) {
             // Summary Card
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = AppConstants.DEFAULT_PADDING.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.errorContainer
-                ),
-                elevation = CardDefaults.cardElevation(defaultElevation = AppConstants.CARD_ELEVATION.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(AppConstants.DEFAULT_PADDING.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        "Total Spendings",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onErrorContainer
-                    )
-                    Text(
-                        "$${spendings.sumOf { it.amount }}",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onErrorContainer
-                    )
-                }
-            }
+            TotalSpendingCard(
+                totalAmount = totalAmount,
+                totalCount = totalCount,
+                onGraphClick = onNavigateToGraphs
+            )
 
             HorizontalDivider(
                 color = MaterialTheme.colorScheme.primaryContainer,

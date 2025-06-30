@@ -1,4 +1,4 @@
-package com.example.spendtracker.composable
+package com.example.spendtracker.composable.graph
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,28 +29,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.spendtracker.composable.GraphSummary
+import com.example.spendtracker.composable.getSharedGradient
 import com.example.spendtracker.enums.ChartType
 import com.example.spendtracker.enums.SortOption
-import com.example.spendtracker.model.Investment
+import com.example.spendtracker.model.Spending
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InvestmentGraphsScreen(
-    investments: List<Investment>,
+fun SpendingGraphsScreen(
+    spending: List<Spending>,
     onBackClick: () -> Unit
 
 ) {
     var selectedSortOption by remember { mutableStateOf(SortOption.DATE_DESC) }
     var selectedChartType by remember { mutableStateOf(ChartType.PIE) }
 
-    val sortedInvestments = remember(investments, selectedSortOption) {
+    val sortedSpending = remember(spending, selectedSortOption) {
         when (selectedSortOption) {
-            SortOption.DATE_ASC -> investments.sortedBy { it.date }
-            SortOption.DATE_DESC -> investments.sortedByDescending { it.date }
-            SortOption.CATEGORY -> investments.sortedBy { it.category }
-            SortOption.AMOUNT_ASC -> investments.sortedBy { it.amount }
-            SortOption.AMOUNT_DESC -> investments.sortedByDescending { it.amount }
+            SortOption.DATE_ASC -> spending.sortedBy { it.date }
+            SortOption.DATE_DESC -> spending.sortedByDescending { it.date }
+            SortOption.CATEGORY -> spending.sortedBy { it.category }
+            SortOption.AMOUNT_ASC -> spending.sortedBy { it.amount }
+            SortOption.AMOUNT_DESC -> spending.sortedByDescending { it.amount }
         }
     }
 
@@ -62,7 +64,7 @@ fun InvestmentGraphsScreen(
     ) {
         // Top App Bar
         TopAppBar(
-            title = { Text("Investment Analytics") },
+            title = { Text("Spending Analytics") },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
                     Icon(
@@ -139,7 +141,7 @@ fun InvestmentGraphsScreen(
         when (selectedChartType) {
             ChartType.PIE -> {
                 PieChartView(
-                    investments = sortedInvestments,
+                    items = sortedSpending,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp)
@@ -149,7 +151,7 @@ fun InvestmentGraphsScreen(
 
             ChartType.BAR -> {
                 BarChartView(
-                    investments = sortedInvestments,
+                    items = sortedSpending,
                     sortOption = selectedSortOption,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -160,8 +162,8 @@ fun InvestmentGraphsScreen(
         }
 
         // Summary Statistics
-        InvestmentSummary(
-            investments = sortedInvestments,
+        GraphSummary(
+            items = sortedSpending,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)

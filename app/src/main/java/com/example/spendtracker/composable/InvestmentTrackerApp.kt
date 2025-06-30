@@ -20,11 +20,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
+import com.example.spendtracker.composable.graph.GraphsScreen
 import com.example.spendtracker.model.Investment
 import com.example.spendtracker.model.InvestmentViewModel
+import com.example.spendtracker.model.Spending
 import com.example.spendtracker.model.SpendingViewModel
-import com.example.spendtracker.repository.Repository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,21 +33,33 @@ fun InvestmentTrackerApp(
     spendingViewModel: SpendingViewModel
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
-    var showGraphs by remember { mutableStateOf(false) }
+    var showInvestmentGraphs by remember { mutableStateOf(false) }
+    var showSpendingGraphs by remember { mutableStateOf(false) }
     var investments by remember { mutableStateOf(emptyList<Investment>()) }
+    var spending by remember { mutableStateOf(emptyList<Spending>()) }
 
     // Collect investments for the graphs
     LaunchedEffect(Unit) {
         investmentViewModel.investments.collect { investmentList ->
             investments = investmentList
+
+            spendingViewModel.spendings.collect { spendingList ->
+                spending = spendingList
+            }
         }
     }
-    
-    if (showGraphs) {
+
+    if (showInvestmentGraphs) {
         // Show the graphs screen
-        InvestmentGraphsScreen(
-            investments = investments,
-            onBackClick = { showGraphs = false }
+        GraphsScreen(
+            items = investments,
+            onBackClick = { showInvestmentGraphs = false }
+        )
+    } else if (showSpendingGraphs) {
+        GraphsScreen(
+            items = spending,
+            onBackClick = { showSpendingGraphs = false }
+
         )
     } else {
         Column {
@@ -77,7 +89,8 @@ fun InvestmentTrackerApp(
                     onTabChanged = { selectedTab = it },
                     investmentViewModel = investmentViewModel,
                     spendingViewModel = spendingViewModel,
-                    onNavigateToInvestmentGraphs = { showGraphs = true }
+                    onNavigateToInvestmentGraphs = { showInvestmentGraphs = true },
+                    onNavigateToSpendingGraphs = { showSpendingGraphs = true }
                 )
             }
         }

@@ -40,6 +40,7 @@ fun InvestmentSpendingCarousel(
     investmentViewModel: InvestmentViewModel,
     spendingViewModel: SpendingViewModel,
     onNavigateToInvestmentGraphs: () -> Unit,
+    onNavigateToSpendingGraphs: () -> Unit
 ) {
     val pagerState = rememberPagerState(
         initialPage = selectedTab,
@@ -95,8 +96,15 @@ fun InvestmentSpendingCarousel(
 
         // Content based on selected page
         when (pagerState.currentPage) {
-            0 -> InvestmentScreen(investmentViewModel, onNavigateToGraphs = onNavigateToInvestmentGraphs)
-            1 -> SpendingScreen(spendingViewModel)
+            0 -> InvestmentScreen(
+                investmentViewModel,
+                onNavigateToGraphs = onNavigateToInvestmentGraphs
+            )
+
+            1 -> SpendingScreen(
+                spendingViewModel,
+                onNavigateToGraphs = onNavigateToSpendingGraphs
+            )
         }
     }
 }
@@ -110,7 +118,10 @@ fun CarouselCard(
     Card(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = AppConstants.DEFAULT_PADDING.dp, vertical = AppConstants.SMALL_PADDING.dp),
+            .padding(
+                horizontal = AppConstants.DEFAULT_PADDING.dp,
+                vertical = AppConstants.SMALL_PADDING.dp
+            ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isSelected) AppConstants.CARD_SELECTED_ELEVATION.dp else AppConstants.CARD_ELEVATION.dp
         ),

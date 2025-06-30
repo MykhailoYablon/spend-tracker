@@ -59,12 +59,15 @@ fun SpendingItem(
                     color = MaterialTheme.colorScheme.outline
                 )
                 Text(
-                    SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date(spending.date)),
+                    SimpleDateFormat(
+                        "MMM dd, yyyy",
+                        Locale.getDefault()
+                    ).format(Date(spending.date)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline
                 )
             }
-            
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(AppConstants.SMALL_PADDING.dp)
@@ -75,7 +78,7 @@ fun SpendingItem(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.error
                 )
-                
+
                 onDelete?.let {
                     IconButton(
                         onClick = it,
