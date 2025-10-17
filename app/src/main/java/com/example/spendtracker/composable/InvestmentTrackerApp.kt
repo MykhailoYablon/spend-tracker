@@ -4,7 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -17,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -62,26 +69,29 @@ fun InvestmentTrackerApp(
 
         )
     } else {
-        Column {
-            // Top App Bar
-            TopAppBar(
-                title = {
-                    Text(
-                        "Financial Tracker",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.Center
+        Scaffold(
+            containerColor = Color.Transparent,
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = "Financial Tracker",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                        titleContentColor = Color(0xFF553AB7)
                     )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
-                    titleContentColor = androidx.compose.material3.MaterialTheme.colorScheme.onPrimary
                 )
-            )
-
+            }
+        ) {
+            paddingValues ->
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(paddingValues)
                     .background(brush = getSharedGradient())
             ) {
                 InvestmentSpendingCarousel(
@@ -100,8 +110,8 @@ fun InvestmentTrackerApp(
 @Composable
 fun getSharedGradient() = Brush.verticalGradient(
     colors = listOf(
-        androidx.compose.material3.MaterialTheme.colorScheme.primary,
-        androidx.compose.material3.MaterialTheme.colorScheme.secondary,
-        androidx.compose.material3.MaterialTheme.colorScheme.tertiary
+        Color(0xFF282272), // Blue
+        Color(0xFF553AB7), // Purple
+        Color(0x4D6C43FF)
     )
 )

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.spendtracker.R
+import com.example.spendtracker.composable.calculator.BondScreen
 import com.example.spendtracker.model.InvestmentViewModel
 import com.example.spendtracker.model.SpendingViewModel
 import com.example.spendtracker.util.AppConstants
@@ -44,7 +46,7 @@ fun InvestmentSpendingCarousel(
 ) {
     val pagerState = rememberPagerState(
         initialPage = selectedTab,
-        pageCount = { 2 }
+        pageCount = { 3 }
     )
 
     // Sync pager state with selectedTab
@@ -64,9 +66,19 @@ fun InvestmentSpendingCarousel(
                 .fillMaxWidth()
                 .height(AppConstants.CAROUSEL_HEIGHT.dp),
         ) { page ->
+            val title = when (page) {
+                0 -> "Bonds"
+                1 -> "Investments"
+                else -> "Spendings"
+            }
+            val imageRes = when (page) {
+                0 -> R.drawable.balance
+                1 -> R.drawable.gold_stack
+                else -> R.drawable.balance
+            }
             CarouselCard(
-                title = if (page == 0) "Investments" else "Spendings",
-                imageRes = if (page == 0) R.drawable.gold_stack else R.drawable.balance,
+                title = title,
+                imageRes = imageRes,
                 isSelected = page == pagerState.currentPage
             )
         }
@@ -78,7 +90,7 @@ fun InvestmentSpendingCarousel(
                 .padding(AppConstants.DEFAULT_PADDING.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            repeat(2) { index ->
+            repeat(3) { index ->
                 Box(
                     modifier = Modifier
                         .size(AppConstants.PAGE_INDICATOR_SIZE.dp)
@@ -96,12 +108,14 @@ fun InvestmentSpendingCarousel(
 
         // Content based on selected page
         when (pagerState.currentPage) {
-            0 -> InvestmentScreen(
+            0 -> BondScreen()
+
+            1 -> InvestmentScreen(
                 investmentViewModel,
                 onNavigateToGraphs = onNavigateToInvestmentGraphs
             )
 
-            1 -> SpendingScreen(
+            2 -> SpendingScreen(
                 spendingViewModel,
                 onNavigateToGraphs = onNavigateToSpendingGraphs
             )
