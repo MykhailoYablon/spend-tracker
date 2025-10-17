@@ -3,10 +3,18 @@ package com.example.spendtracker
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.example.spendtracker.composable.InvestmentTrackerApp
 import com.example.spendtracker.ds.AppDatabase
@@ -39,11 +47,20 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
-                InvestmentTrackerApp(
-                    investmentViewModel = investmentViewModel,
-                    spendingViewModel = spendingViewModel
-                )
+            var useDarkTheme by rememberSaveable { mutableStateOf(true) }
+
+            MaterialTheme(
+                colorScheme = if (useDarkTheme) darkColorScheme() else lightColorScheme()
+            ) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    InvestmentTrackerApp(
+                        investmentViewModel = investmentViewModel,
+                        spendingViewModel = spendingViewModel
+                    )
+                }
             }
         }
         val controller = WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView())
