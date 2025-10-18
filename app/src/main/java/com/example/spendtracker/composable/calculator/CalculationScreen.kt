@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.example.spendtracker.model.CalculationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,13 +23,17 @@ fun CalculationScreen(
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("Calculation", "History")
 
+
     Column(modifier = Modifier.fillMaxSize()) {
-        TabRow(selectedTabIndex = selectedTab) {
+        TabRow(selectedTabIndex = selectedTab,
+            backgroundColor = Color(0xFF4A90E2)) {
             tabs.forEachIndexed { index, title ->
                 Tab(
                     selected = selectedTab == index,
                     onClick = { selectedTab = index },
-                    text = { Text(title) }
+                    text = { Text(title) },
+                    selectedContentColor = Color.White,
+                    unselectedContentColor = Color.Black
                 )
             }
         }

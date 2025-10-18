@@ -52,21 +52,21 @@ fun HistoryScreen(
     var showDeleteAllDialog by remember { mutableStateOf(false) }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("History") },
-                actions = {
-                    if (calculations.isNotEmpty()) {
-                        IconButton(onClick = { showDeleteAllDialog = true }) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Clear History"
-                            )
-                        }
-                    }
-                }
-            )
-        }
+//        topBar = {
+//            TopAppBar(
+//                title = { Text("History") },
+//                actions = {
+//                    if (calculations.isNotEmpty()) {
+//                        IconButton(onClick = { showDeleteAllDialog = true }) {
+//                            Icon(
+//                                imageVector = Icons.Default.Delete,
+//                                contentDescription = "Clear History"
+//                            )
+//                        }
+//                    }
+//                }
+//            )
+//        }
     ) { paddingValues ->
         if (calculations.isEmpty()) {
             Box(

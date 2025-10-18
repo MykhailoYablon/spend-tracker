@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,11 +36,11 @@ fun SplitInputField(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(12.dp))
             .border(
                 width = 1.dp,
                 color = Color.White.copy(alpha = 0.3f),
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(12.dp)
             )
             .background(Color(0xFF2A2A2A))
     ) {
@@ -72,7 +73,7 @@ fun SplitInputField(
                     .padding(horizontal = 16.dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
-                androidx.compose.foundation.text.BasicTextField(
+                BasicTextField(
                     value = value,
                     onValueChange = onValueChange,
                     textStyle = TextStyle(

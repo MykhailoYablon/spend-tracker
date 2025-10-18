@@ -21,6 +21,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,23 +33,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.spendtracker.R
-import com.example.spendtracker.composable.calculator.CalculationScreen
+import com.example.spendtracker.composable.investment.InvestmentScreen
+import com.example.spendtracker.composable.spending.SpendingScreen
 import com.example.spendtracker.model.InvestmentViewModel
 import com.example.spendtracker.model.SpendingViewModel
 import com.example.spendtracker.util.AppConstants
 
 @Composable
 fun InvestmentSpendingCarousel(
-    selectedTab: Int,
-    onTabChanged: (Int) -> Unit,
     investmentViewModel: InvestmentViewModel,
     spendingViewModel: SpendingViewModel,
     onNavigateToInvestmentGraphs: () -> Unit,
     onNavigateToSpendingGraphs: () -> Unit
 ) {
+    var selectedTab by remember { mutableIntStateOf(0) }
     val pagerState = rememberPagerState(
         initialPage = selectedTab,
-        pageCount = { 3 }
+        pageCount = { 2 }
     )
 
     // Sync pager state with selectedTab
@@ -53,9 +57,9 @@ fun InvestmentSpendingCarousel(
         pagerState.animateScrollToPage(selectedTab)
     }
 
-    LaunchedEffect(pagerState.currentPage) {
-        onTabChanged(pagerState.currentPage)
-    }
+//    LaunchedEffect(pagerState.currentPage) {
+//        onTabChanged(pagerState.currentPage)
+//    }
 
     Column {
         // Carousel Header with Images
@@ -66,13 +70,11 @@ fun InvestmentSpendingCarousel(
                 .height(AppConstants.CAROUSEL_HEIGHT.dp),
         ) { page ->
             val title = when (page) {
-                0 -> "Bonds"
-                1 -> "Investments"
+                0 -> "Investments"
                 else -> "Spendings"
             }
             val imageRes = when (page) {
-                0 -> R.drawable.balance
-                1 -> R.drawable.gold_stack
+                0 -> R.drawable.gold_stack
                 else -> R.drawable.balance
             }
             CarouselCard(
@@ -107,14 +109,12 @@ fun InvestmentSpendingCarousel(
 
         // Content based on selected page
         when (pagerState.currentPage) {
-//            0 -> CalculationScreen()
-
-            1 -> InvestmentScreen(
+            0 -> InvestmentScreen(
                 investmentViewModel,
                 onNavigateToGraphs = onNavigateToInvestmentGraphs
             )
 
-            2 -> SpendingScreen(
+            1 -> SpendingScreen(
                 spendingViewModel,
                 onNavigateToGraphs = onNavigateToSpendingGraphs
             )
