@@ -1,6 +1,9 @@
 package com.example.spendtracker.composable.calculator
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -26,11 +30,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -41,9 +49,9 @@ import kotlin.math.pow
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BondScreen() {
-    var priceText by remember { mutableStateOf("") }
-    var yieldText by remember { mutableStateOf("") }
-    var bankReturnText by remember { mutableStateOf("") }
+    var purchasePriceText by remember { mutableStateOf("1000") }
+    var couponRateText by remember { mutableStateOf("17") }
+    var bankReturnText by remember { mutableStateOf("1170") }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
     var showDatePicker by remember { mutableStateOf(false) }
     var resultText by remember { mutableStateOf<String?>(null) }
@@ -56,18 +64,18 @@ fun BondScreen() {
     }
 
     fun calculate() {
-        val price = priceText.replace(',', '.').toDoubleOrNull()
-        val yieldPercent = yieldText.replace(',', '.').toDoubleOrNull()
+        val price = purchasePriceText.replace(',', '.').toDoubleOrNull()
+        val couponRate = couponRateText.replace(',', '.').toDoubleOrNull()
         val bankReturn = bankReturnText.replace(',', '.').toDoubleOrNull()
         val date = selectedDate
-        if (price == null || yieldPercent == null || date == null || bankReturn == null) {
+        if (price == null || couponRate == null || date == null || bankReturn == null) {
             resultText = "Please enter valid price, yield, bank return, and date."
             return
         }
         val today = LocalDate.now()
         val days = ChronoUnit.DAYS.between(today, date).coerceAtLeast(0)
         val years = days / 365.25
-        val theoreticalFutureValue = price * (1.0 + (yieldPercent / 100.0)).pow(years)
+        val theoreticalFutureValue = price * (1.0 + (couponRate / 100.0)).pow(years)
         val realReturn = bankReturn - price
         val bankCommission = theoreticalFutureValue - bankReturn
         val realPercentage = if (years > 0.0) {
@@ -102,80 +110,187 @@ fun BondScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
+        // Header
         Text(
-            text = "Bond Return Calculator",
-            style = MaterialTheme.typography.headlineSmall,
+            text = "BOND RETURN CALCULATOR",
+            style = MaterialTheme.typography.headlineMedium,
             color = Color.White,
             modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = priceText,
-            onValueChange = { priceText = it },
-            label = { Text("Bond price (e.g., 1051.24)") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        // Tab Row (Calculate/History)
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            colors = textFieldColors()
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        OutlinedTextField(
-            value = yieldText,
-            onValueChange = { yieldText = it },
-            label = { Text("Annual yield % (e.g., 17.35)") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth(),
-            colors = textFieldColors()
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        OutlinedTextField(
-            value = bankReturnText,
-            onValueChange = { bankReturnText = it },
-            label = { Text("Bank return (e.g., 1324)") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth(),
-            colors = textFieldColors()
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             Text(
-                text = selectedDate?.toString() ?: "Select return date",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.weight(1f),
-                color = Color.White
+                text = "CALCULATE",
+                style = MaterialTheme.typography.titleMedium,
+                color = Color(0xFF4A90E2),
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
             )
-            Button(onClick = { showDatePicker = true }) { Text("Pick Date") }
+            Text(
+                text = "HISTORY",
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White.copy(alpha = 0.6f)
+            )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        Button(onClick = { calculate() }, modifier = Modifier.fillMaxWidth()) { Text("Calculate") }
+        // Input Fields
+        SplitInputField(
+            label = "Purchase Price ($)",
 
-        Spacer(modifier = Modifier.height(16.dp))
+            value = purchasePriceText,
+            onValueChange = { purchasePriceText = it },
+            keyboardType = KeyboardType.Number
+        )
 
+        SplitInputField(
+            label = "Bank Return ($)",
+            value = bankReturnText,
+            onValueChange = { bankReturnText = it },
+            keyboardType = KeyboardType.Number
+        )
+
+        SplitInputField(
+            label = "Coupon Rate (%)",
+            value = couponRateText,
+            onValueChange = { couponRateText = it },
+            keyboardType = KeyboardType.Number
+        )
+
+        // Date picker row
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = selectedDate?.toString() ?: "Select return date",
+                color = Color.White,
+                fontSize = 16.sp,
+                modifier = Modifier.weight(1f)
+            )
+            Button(
+                onClick = { showDatePicker = true },
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF4A90E2)
+                )
+            ) {
+                Text("Pick Date", color = Color.White)
+            }
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Calculate Button
+        Button(
+            onClick = { calculate() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF4A90E2)
+            )
+        ) {
+            Text(
+                text = "CALCULATE RETURN",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                color = Color.White
+            )
+        }
+
+//        Spacer(modifier = Modifier.height(10.dp))
+
+        // Results
         resultText?.let { text ->
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                colors = CardDefaults.cardColors(
+                    containerColor = Color(0xFF2A2A2A)
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(16.dp)
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.White,
+                    modifier = Modifier.padding(20.dp),
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SplitInputField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .border(
+                width = 1.dp,
+                color = Color.White.copy(alpha = 0.3f),
+                shape = RoundedCornerShape(8.dp)
+            )
+            .background(Color(0xFF2A2A2A))
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Left half - Label
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Text(
+                    text = label,
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+            
+            // Right half - Input value
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize()
+                    .background(Color.DarkGray)
+                    .padding(horizontal = 16.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                androidx.compose.foundation.text.BasicTextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    textStyle = TextStyle(
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.End
+                    ),
+                    keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
@@ -186,9 +301,9 @@ fun BondScreen() {
 private fun textFieldColors() = TextFieldDefaults.colors(
     focusedLabelColor = Color.White,
     unfocusedLabelColor = Color.White,
-    focusedTextColor = Color.Black,
-    unfocusedTextColor = Color.Black,
-    cursorColor = Color.Black,
-    focusedIndicatorColor = Color.Black,
-    unfocusedIndicatorColor = Color.Black
+    focusedTextColor = Color.White,
+    unfocusedTextColor = Color.White,
+    cursorColor = Color.White,
+    focusedIndicatorColor = Color(0xFF4A90E2),
+    unfocusedIndicatorColor = Color.White.copy(alpha = 0.6f)
 )
