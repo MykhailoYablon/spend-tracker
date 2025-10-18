@@ -4,7 +4,7 @@ import com.example.spendtracker.dao.CalculationDao
 import com.example.spendtracker.model.CalculationResult
 import kotlinx.coroutines.flow.Flow
 
-class BondRepository(private val calculationDao: CalculationDao) {
+class CalculationRepository(private val calculationDao: CalculationDao) {
 
     fun getAll(): Flow<List<CalculationResult>> = calculationDao.getAll()
 

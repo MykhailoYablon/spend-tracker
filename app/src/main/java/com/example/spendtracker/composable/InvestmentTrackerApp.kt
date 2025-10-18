@@ -26,8 +26,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.spendtracker.composable.calculator.CalculationScreen
+import com.example.spendtracker.composable.calculator.HistoryScreen
 import com.example.spendtracker.composable.calculator.BondScreen
 import com.example.spendtracker.composable.graph.GraphsScreen
+import com.example.spendtracker.model.CalculationViewModel
 import com.example.spendtracker.model.Investment
 import com.example.spendtracker.model.InvestmentViewModel
 import com.example.spendtracker.model.Spending
@@ -37,7 +42,8 @@ import com.example.spendtracker.model.SpendingViewModel
 @Composable
 fun InvestmentTrackerApp(
     investmentViewModel: InvestmentViewModel,
-    spendingViewModel: SpendingViewModel
+    spendingViewModel: SpendingViewModel,
+    calculationViewModel: CalculationViewModel
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
     var selectedBottomTab by remember { mutableIntStateOf(0) }
@@ -116,6 +122,10 @@ fun InvestmentTrackerApp(
                     .padding(paddingValues)
                     .background(brush = getSharedGradient())
             ) {
+//                when (selectedTab) {
+//                    0 -> CalculationScreen(calculationViewModel)
+//                    1 -> HistoryScreen(calculationViewModel)
+//                }
 //                InvestmentSpendingCarousel(
 //                    selectedTab = selectedTab,
 //                    onTabChanged = { selectedTab = it },
@@ -126,7 +136,7 @@ fun InvestmentTrackerApp(
 //                )
 
                 when (selectedBottomTab) {
-                    0 -> BondScreen()
+                    0 -> CalculationScreen(calculationViewModel)
                     1 -> FavoritesScreen()
                     2 -> SettingsScreen()
                 }

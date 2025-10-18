@@ -18,8 +18,10 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.room.Room
 import com.example.spendtracker.composable.InvestmentTrackerApp
 import com.example.spendtracker.ds.AppDatabase
+import com.example.spendtracker.model.CalculationViewModel
 import com.example.spendtracker.model.InvestmentViewModel
 import com.example.spendtracker.model.SpendingViewModel
+import com.example.spendtracker.repository.CalculationRepository
 import com.example.spendtracker.repository.Repository
 
 class MainActivity : ComponentActivity() {
@@ -36,12 +38,20 @@ class MainActivity : ComponentActivity() {
         Repository(database.investmentDao(), database.spendingDao())
     }
 
+    private val calculationRepository by lazy {
+        CalculationRepository(database.calculationDao())
+    }
+
     private val investmentViewModel by lazy {
         InvestmentViewModel(repository)
     }
 
     private val spendingViewModel by lazy {
         SpendingViewModel(repository)
+    }
+
+    private val calculationViewModel by lazy {
+        CalculationViewModel(calculationRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +68,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     InvestmentTrackerApp(
                         investmentViewModel = investmentViewModel,
-                        spendingViewModel = spendingViewModel
+                        spendingViewModel = spendingViewModel,
+                        calculationViewModel = calculationViewModel
                     )
                 }
             }

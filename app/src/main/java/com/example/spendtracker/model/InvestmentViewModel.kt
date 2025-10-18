@@ -23,16 +23,16 @@ data class InvestmentScreenState(
 )
 
 class InvestmentViewModel(private val repository: Repository) : ViewModel() {
-    
+
     private val _uiState = MutableStateFlow(InvestmentScreenState())
     val uiState: StateFlow<InvestmentScreenState> = _uiState.asStateFlow()
-    
+
     val investments = repository.getAllInvestments()
-    
+
     fun showAddDialog() {
         _uiState.value = _uiState.value.copy(showDialog = true)
     }
-    
+
     fun hideDialog() {
         _uiState.value = _uiState.value.copy(
             showDialog = false,
@@ -40,16 +40,16 @@ class InvestmentViewModel(private val repository: Repository) : ViewModel() {
             errorMessage = null
         )
     }
-    
+
     fun editInvestment(investment: Investment) {
         _uiState.value = _uiState.value.copy(investmentToEdit = investment)
     }
-    
+
     fun addInvestment(name: String, category: String, amount: Double) {
         if (!validateInput(name, amount)) {
             return
         }
-        
+
         viewModelScope.launch {
             try {
                 _uiState.value = _uiState.value.copy(isLoading = true)
@@ -57,7 +57,7 @@ class InvestmentViewModel(private val repository: Repository) : ViewModel() {
                     Investment(
                         name = name.trim(),
                         category = category.trim(),
-                        amount = amount.toDouble()
+                        amount = amount
                     )
                 )
                 hideDialog()
@@ -70,12 +70,12 @@ class InvestmentViewModel(private val repository: Repository) : ViewModel() {
             }
         }
     }
-    
+
     fun updateInvestment(investment: Investment, name: String, category: String, amount: Double) {
         if (!validateInput(name, amount)) {
             return
         }
-        
+
         viewModelScope.launch {
             try {
                 _uiState.value = _uiState.value.copy(isLoading = true)
@@ -95,7 +95,7 @@ class InvestmentViewModel(private val repository: Repository) : ViewModel() {
             }
         }
     }
-    
+
     fun deleteInvestment(investment: Investment) {
         viewModelScope.launch {
             try {
@@ -107,21 +107,24 @@ class InvestmentViewModel(private val repository: Repository) : ViewModel() {
             }
         }
     }
-    
+
     private fun validateInput(name: String, amount: Double): Boolean {
         return when {
             name.isBlank() -> {
                 _uiState.value = _uiState.value.copy(errorMessage = AppConstants.ERROR_EMPTY_NAME)
                 false
             }
-            amount.toDouble() <= 0 -> {
-                _uiState.value = _uiState.value.copy(errorMessage = AppConstants.ERROR_NEGATIVE_AMOUNT)
+
+            amount <= 0 -> {
+                _uiState.value =
+                    _uiState.value.copy(errorMessage = AppConstants.ERROR_NEGATIVE_AMOUNT)
                 false
             }
+
             else -> true
         }
     }
-    
+
     fun clearError() {
         _uiState.value = _uiState.value.copy(errorMessage = null)
     }

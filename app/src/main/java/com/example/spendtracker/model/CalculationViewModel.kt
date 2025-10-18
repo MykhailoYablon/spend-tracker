@@ -2,20 +2,20 @@ package com.example.spendtracker.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spendtracker.repository.BondRepository
+import com.example.spendtracker.repository.CalculationRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class BondViewModel(private val repository: BondRepository) : ViewModel() {
+class CalculationViewModel(private val repository: CalculationRepository) : ViewModel() {
     private val _showDetailScreen = MutableStateFlow(false)
     val showDetailScreen = _showDetailScreen.asStateFlow()
 
-    val bonds = repository.getAllBonds()
+    val allCalculations = repository.getAll()
 
-    private val _selectedCalculation = MutableStateFlow<Calculation?>(null)
-    val selectedBond = _selectedCalculation.asStateFlow()
+    private val _selectedCalculationResult = MutableStateFlow<CalculationResult?>(null)
+    val selectedBond = _selectedCalculationResult.asStateFlow()
 
     private val _showAddDialog = MutableStateFlow(false)
     val showAddDialog: StateFlow<Boolean> = _showAddDialog.asStateFlow()
@@ -28,25 +28,31 @@ class BondViewModel(private val repository: BondRepository) : ViewModel() {
         _showAddDialog.value = false
     }
 
-    fun showDetailDialog(Calculation: Calculation) {
-        _selectedCalculation.value = Calculation
+    fun showDetailDialog(CalculationResult: CalculationResult) {
+        _selectedCalculationResult.value = CalculationResult
         _showDetailScreen.value = true
     }
 
     fun hideDetailScreen() {
         _showDetailScreen.value = false
-        _selectedCalculation.value = null
+        _selectedCalculationResult.value = null
     }
 
-    fun addBond(calculation: Calculation) {
+    fun add(calculationResult: CalculationResult) {
         viewModelScope.launch {
-            repository.insertBond(calculation)
+            repository.insert(calculationResult)
         }
     }
 
-    fun deleteBond(Calculation: Calculation) {
+    fun delete(CalculationResult: CalculationResult) {
         viewModelScope.launch {
-            repository.deleteBond(Calculation)
+            repository.delete(CalculationResult)
+        }
+    }
+
+    fun deleteAll() {
+        viewModelScope.launch {
+            repository.deleteAll()
         }
     }
 }

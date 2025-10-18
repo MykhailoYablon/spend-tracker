@@ -1,19 +1,24 @@
 package com.example.spendtracker.dao
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.spendtracker.model.Calculation
+import com.example.spendtracker.model.CalculationResult
 import kotlinx.coroutines.flow.Flow
 
+@Dao
 interface CalculationDao {
 
-    @Query("SELECT * FROM bonds ORDER BY timestamp DESC")
-    fun getAllBonds(): Flow<List<Calculation>>
+    @Query("SELECT * FROM calculations ORDER BY timestamp DESC")
+    fun getAll(): Flow<List<CalculationResult>>
 
     @Insert
-    suspend fun insertBond(calculation: Calculation)
+    suspend fun insert(calculationResult: CalculationResult)
 
     @Delete
-    suspend fun deleteBond(calculation: Calculation)
+    suspend fun delete(calculationResult: CalculationResult)
+
+    @Query("DELETE FROM calculations")
+    suspend fun deleteAll()
 }
