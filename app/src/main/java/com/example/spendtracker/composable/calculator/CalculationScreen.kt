@@ -20,11 +20,10 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +38,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.spendtracker.model.CalculationResult
+import com.example.spendtracker.model.CalculationViewModel
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -48,13 +49,17 @@ import kotlin.math.pow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BondScreen() {
+fun BondScreen(
+    calculationViewModel: CalculationViewModel
+) {
     var purchasePriceText by remember { mutableStateOf("1000") }
     var couponRateText by remember { mutableStateOf("17") }
     var bankReturnText by remember { mutableStateOf("1170") }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
     var showDatePicker by remember { mutableStateOf(false) }
     var resultText by remember { mutableStateOf<String?>(null) }
+
+
 
     val datePickerState = rememberDatePickerState()
 
@@ -85,13 +90,23 @@ fun BondScreen() {
             ((realReturn / price) * 100.0)
         }
         resultText = buildString {
-            append(String.format(Locale.getDefault(), "Theoretical FV: %.2f\n", theoreticalFutureValue))
+            append(String.format(Locale.getDefault(), "Theoretical Future Value: %.2f\n", theoreticalFutureValue))
             append(String.format(Locale.getDefault(), "Bank return: %.2f\n", bankReturn))
             append(String.format(Locale.getDefault(), "Real return: %.2f\n", realReturn))
             append(String.format(Locale.getDefault(), "Bank commission: %.2f\n", bankCommission))
             // Escape the literal percent before "(with commission)" and at the end
             append(String.format(Locale.getDefault(), "Real %% (with commission): %.2f%%", realPercentage))
         }
+
+        // Save to database
+        val calculationResult = CalculationResult(
+            theoreticalFutureValue = theoreticalFutureValue,
+            bankReturn = bankReturn,
+            realReturn = realReturn,
+            bankCommission = bankCommission,
+            realPercentage = realPercentage
+        )
+        calculationViewModel.add(calculationResult)
     }
 
     if (showDatePicker) {
