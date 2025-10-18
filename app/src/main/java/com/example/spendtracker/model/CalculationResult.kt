@@ -3,8 +3,8 @@ package com.example.spendtracker.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "bonds")
-data class Calculation(
+@Entity(tableName = "calculations")
+data class CalculationResult(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val theoreticalFutureValue: Double,
