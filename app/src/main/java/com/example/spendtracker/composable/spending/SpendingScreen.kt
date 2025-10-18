@@ -1,4 +1,4 @@
-package com.example.spendtracker.composable
+package com.example.spendtracker.composable.spending
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

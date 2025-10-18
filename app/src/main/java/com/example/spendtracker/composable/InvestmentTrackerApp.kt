@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,11 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spendtracker.composable.calculator.CalculationScreen
-import com.example.spendtracker.composable.calculator.HistoryScreen
-import com.example.spendtracker.composable.calculator.BondScreen
 import com.example.spendtracker.composable.graph.GraphsScreen
 import com.example.spendtracker.model.CalculationViewModel
 import com.example.spendtracker.model.Investment
@@ -45,7 +43,6 @@ fun InvestmentTrackerApp(
     spendingViewModel: SpendingViewModel,
     calculationViewModel: CalculationViewModel
 ) {
-    var selectedTab by remember { mutableIntStateOf(0) }
     var selectedBottomTab by remember { mutableIntStateOf(0) }
     var showInvestmentGraphs by remember { mutableStateOf(false) }
     var showSpendingGraphs by remember { mutableStateOf(false) }
@@ -78,21 +75,6 @@ fun InvestmentTrackerApp(
     } else {
         Scaffold(
             containerColor = Color.Transparent,
-//            topBar = {
-//                TopAppBar(
-//                    title = {
-//                        Text(
-//                            text = "Financial Tracker",
-//                            modifier = Modifier.fillMaxWidth(),
-//                            textAlign = TextAlign.Center
-//                        )
-//                    },
-//                    colors = TopAppBarDefaults.topAppBarColors(
-//                        containerColor = Color.Transparent,
-//                        titleContentColor = Color(0xFF553AB7)
-//                    )
-//                )
-//            },
             bottomBar = {
                 NavigationBar {
                     NavigationBarItem(
@@ -104,12 +86,18 @@ fun InvestmentTrackerApp(
                     NavigationBarItem(
                         selected = selectedBottomTab == 1,
                         onClick = { selectedBottomTab = 1 },
-                        icon = { Icon(Icons.Default.Favorite, contentDescription = "Favorites") },
-                        label = { Text("Favorites") }
+                        icon = { Icon(Icons.Filled.Info, contentDescription = "Tracker") },
+                        label = { Text("Tracker") }
                     )
                     NavigationBarItem(
                         selected = selectedBottomTab == 2,
                         onClick = { selectedBottomTab = 2 },
+                        icon = { Icon(Icons.Default.Favorite, contentDescription = "Favorites") },
+                        label = { Text("Favorites") }
+                    )
+                    NavigationBarItem(
+                        selected = selectedBottomTab == 3,
+                        onClick = { selectedBottomTab = 3 },
                         icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") },
                         label = { Text("Settings") }
                     )
@@ -120,25 +108,19 @@ fun InvestmentTrackerApp(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(paddingValues)
-                    .background(brush = getSharedGradient())
+//                    .background(Color.Black)
             ) {
-//                when (selectedTab) {
-//                    0 -> CalculationScreen(calculationViewModel)
-//                    1 -> HistoryScreen(calculationViewModel)
-//                }
-//                InvestmentSpendingCarousel(
-//                    selectedTab = selectedTab,
-//                    onTabChanged = { selectedTab = it },
-//                    investmentViewModel = investmentViewModel,
-//                    spendingViewModel = spendingViewModel,
-//                    onNavigateToInvestmentGraphs = { showInvestmentGraphs = true },
-//                    onNavigateToSpendingGraphs = { showSpendingGraphs = true }
-//                )
 
                 when (selectedBottomTab) {
                     0 -> CalculationScreen(calculationViewModel)
-                    1 -> FavoritesScreen()
-                    2 -> SettingsScreen()
+                    1 -> InvestmentSpendingCarousel(
+                        investmentViewModel = investmentViewModel,
+                        spendingViewModel = spendingViewModel,
+                        onNavigateToInvestmentGraphs = { showInvestmentGraphs = true },
+                        onNavigateToSpendingGraphs = { showSpendingGraphs = true }
+                    )
+                    2 -> FavoritesScreen()
+                    3 -> SettingsScreen()
                 }
             }
         }
@@ -176,8 +158,8 @@ fun SettingsScreen() {
 @Composable
 fun getSharedGradient() = Brush.verticalGradient(
     colors = listOf(
-        Color(0xFF282272), // Blue
-        Color(0xFF553AB7), // Purple
-        Color(0x4D6C43FF)
+        Color(0xFFF2F1F5), // Blue
+        Color(0xFF2F2754), // Purple
+        Color.Black
     )
 )

@@ -1,9 +1,8 @@
-package com.example.spendtracker.composable
+package com.example.spendtracker.composable.investment
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,34 +17,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.spendtracker.model.Investment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InvestmentDialog(
+fun AddInvestmentDialog(
     onDismiss: () -> Unit,
-    onSave: (String, String, Double) -> Unit,
-    investment: Investment? = null // null for add, Investment object for edit
+    onAdd: (String, String, Double) -> Unit
 ) {
-    // Pre-populate fields if editing existing investment
-    var name by remember { mutableStateOf(investment?.name ?: "") }
-    var category by remember { mutableStateOf(investment?.category ?: "") }
-    var amount by remember { mutableStateOf(investment?.amount?.toString() ?: "") }
+    var name by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf("") }
+    var amount by remember { mutableStateOf("") }
 
     val investmentCategories =
         listOf("Stocks", "Bonds", "Real Estate", "Cryptocurrency", "Mutual Funds", "Other")
     var expanded by remember { mutableStateOf(false) }
 
-    // Determine if we're adding or editing
-    val isEditing = investment != null
-    val dialogTitle = if (isEditing) "Edit Investment" else "Add Investment"
-    val buttonText = if (isEditing) "Update" else "Add"
-
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(dialogTitle) },
+        title = { Text("Add Investment") },
         text = {
             Column {
                 OutlinedTextField(
@@ -94,7 +84,6 @@ fun InvestmentDialog(
                     value = amount,
                     onValueChange = { amount = it },
                     label = { Text("Amount ($)") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -103,11 +92,11 @@ fun InvestmentDialog(
             TextButton(
                 onClick = {
                     if (name.isNotBlank() && category.isNotBlank() && amount.isNotBlank()) {
-                        onSave(name, category, amount.toDoubleOrNull() ?: 0.0)
+                        onAdd(name, category, amount.toDoubleOrNull() ?: 0.0)
                     }
                 }
             ) {
-                Text(buttonText)
+                Text("Add")
             }
         },
         dismissButton = {

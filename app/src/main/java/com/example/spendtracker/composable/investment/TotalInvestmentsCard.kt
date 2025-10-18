@@ -1,4 +1,4 @@
-package com.example.spendtracker.composable
+package com.example.spendtracker.composable.investment
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TotalSpendingCard(
+fun TotalInvestmentsCard(
     totalAmount: Double,
     totalCount: Int,
     onGraphClick: () -> Unit
@@ -51,7 +51,7 @@ fun TotalSpendingCard(
         ) {
             Column {
                 Text(
-                    text = "Total Spending",
+                    text = "Total Investments",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -63,7 +63,7 @@ fun TotalSpendingCard(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "$totalCount spending",
+                    text = "$totalCount investments",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
