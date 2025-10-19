@@ -133,18 +133,6 @@ fun CalculationContent(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // Header
-        Text(
-            text = "BOND RETURN CALCULATOR",
-            style = MaterialTheme.typography.headlineMedium,
-            color = Color.White,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
         // Input Fields
         SplitInputField(
             label = "Purchase Price ($)",
