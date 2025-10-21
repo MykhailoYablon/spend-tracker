@@ -2,7 +2,8 @@ package com.example.spendtracker.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spendtracker.repository.Repository
+import com.example.spendtracker.ds.entity.Investment
+import com.example.spendtracker.ds.repository.Repository
 import com.example.spendtracker.util.AppConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

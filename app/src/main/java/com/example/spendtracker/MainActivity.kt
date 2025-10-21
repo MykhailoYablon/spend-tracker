@@ -20,8 +20,10 @@ import com.example.spendtracker.ds.AppDatabase
 import com.example.spendtracker.model.CalculationViewModel
 import com.example.spendtracker.model.InvestmentViewModel
 import com.example.spendtracker.model.SpendingViewModel
-import com.example.spendtracker.repository.CalculationRepository
-import com.example.spendtracker.repository.Repository
+import com.example.spendtracker.ds.repository.CalculationRepository
+import com.example.spendtracker.ds.repository.CommissionRepository
+import com.example.spendtracker.ds.repository.Repository
+import com.example.spendtracker.model.CommissionViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -37,6 +39,10 @@ class MainActivity : ComponentActivity() {
         CalculationRepository(database.calculationDao())
     }
 
+    private val commissionRepository by lazy {
+        CommissionRepository(database.commissionDao())
+    }
+
     private val investmentViewModel by lazy {
         InvestmentViewModel(repository)
     }
@@ -47,6 +53,9 @@ class MainActivity : ComponentActivity() {
 
     private val calculationViewModel by lazy {
         CalculationViewModel(calculationRepository)
+    }
+    private val commissionViewModel by lazy {
+        CommissionViewModel(commissionRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +73,8 @@ class MainActivity : ComponentActivity() {
                     InvestmentTrackerApp(
                         investmentViewModel = investmentViewModel,
                         spendingViewModel = spendingViewModel,
-                        calculationViewModel = calculationViewModel
+                        calculationViewModel = calculationViewModel,
+                        commissionViewModel = commissionViewModel
                     )
                 }
             }

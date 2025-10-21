@@ -33,7 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.spendtracker.model.CalculationResult
+import com.example.spendtracker.ds.entity.CalculationResult
 import com.example.spendtracker.model.CalculationViewModel
 import java.time.Instant
 import java.time.LocalDate

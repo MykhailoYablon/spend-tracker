@@ -1,10 +1,11 @@
-package com.example.spendtracker.model
+package com.example.spendtracker.ds.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.spendtracker.model.Graph
 
-@Entity(tableName = "investments")
-data class Investment (
+@Entity(tableName = "spendings")
+data class Spending(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val name: String,

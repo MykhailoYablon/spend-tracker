@@ -1,12 +1,10 @@
 package com.example.spendtracker.composable
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
@@ -29,11 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import com.example.spendtracker.composable.calculator.CalculationScreen
+import com.example.spendtracker.composable.calculator.TransferCommissionScreen
 import com.example.spendtracker.composable.graph.GraphsScreen
+import com.example.spendtracker.ds.entity.Investment
+import com.example.spendtracker.ds.entity.Spending
 import com.example.spendtracker.model.CalculationViewModel
-import com.example.spendtracker.model.Investment
+import com.example.spendtracker.model.CommissionViewModel
 import com.example.spendtracker.model.InvestmentViewModel
-import com.example.spendtracker.model.Spending
 import com.example.spendtracker.model.SpendingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,7 +41,8 @@ import com.example.spendtracker.model.SpendingViewModel
 fun InvestmentTrackerApp(
     investmentViewModel: InvestmentViewModel,
     spendingViewModel: SpendingViewModel,
-    calculationViewModel: CalculationViewModel
+    calculationViewModel: CalculationViewModel,
+    commissionViewModel: CommissionViewModel
 ) {
     var selectedBottomTab by remember { mutableIntStateOf(0) }
     var showInvestmentGraphs by remember { mutableStateOf(false) }
@@ -86,14 +87,14 @@ fun InvestmentTrackerApp(
                     NavigationBarItem(
                         selected = selectedBottomTab == 1,
                         onClick = { selectedBottomTab = 1 },
-                        icon = { Icon(Icons.Filled.Info, contentDescription = "Tracker") },
-                        label = { Text("Tracker") }
+                        icon = { Icon(Icons.Default.Favorite, contentDescription = "Favorites") },
+                        label = { Text("Favorites") }
                     )
                     NavigationBarItem(
                         selected = selectedBottomTab == 2,
                         onClick = { selectedBottomTab = 2 },
-                        icon = { Icon(Icons.Default.Favorite, contentDescription = "Favorites") },
-                        label = { Text("Favorites") }
+                        icon = { Icon(Icons.Filled.Info, contentDescription = "Tracker") },
+                        label = { Text("Tracker") }
                     )
                     NavigationBarItem(
                         selected = selectedBottomTab == 3,
@@ -113,13 +114,14 @@ fun InvestmentTrackerApp(
 
                 when (selectedBottomTab) {
                     0 -> CalculationScreen(calculationViewModel)
-                    1 -> InvestmentSpendingCarousel(
+                    1 -> TransferCommissionScreen(commissionViewModel)
+                    2 -> InvestmentSpendingCarousel(
                         investmentViewModel = investmentViewModel,
                         spendingViewModel = spendingViewModel,
                         onNavigateToInvestmentGraphs = { showInvestmentGraphs = true },
                         onNavigateToSpendingGraphs = { showSpendingGraphs = true }
                     )
-                    2 -> FavoritesScreen()
+
                     3 -> SettingsScreen()
                 }
             }

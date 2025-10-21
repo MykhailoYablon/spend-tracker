@@ -24,23 +24,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.example.spendtracker.model.CalculationViewModel
+import com.example.spendtracker.model.CommissionViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalculationScreen(
-    calculationViewModel: CalculationViewModel
-) {
+fun TransferCommissionScreen(commissionViewModel: CommissionViewModel) {
 
     var selectedTab by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Calculation", "History")
+    val tabs = listOf("Commissions", "History")
 
     Column(modifier = Modifier.fillMaxSize()) {
 
         Spacer(modifier = Modifier.height(18.dp))
         // Header
         Text(
-            text = "BOND RETURN CALCULATOR",
+            text = "INVESTMENT COMMISSIONS CALCULATOR",
             style = MaterialTheme.typography.headlineSmall,
             color = Color.White,
             modifier = Modifier.fillMaxWidth(),
@@ -52,7 +50,7 @@ fun CalculationScreen(
 
         TabRow(
             selectedTabIndex = selectedTab,
-            containerColor = Color(0xFF4A90E2),
+            containerColor = Color(0xFF3AAB3E),
 //            divider = VerticalDivider(modifier = Modifier.fillMaxSize()),
             modifier = Modifier
                 .padding(5.dp)
@@ -77,8 +75,8 @@ fun CalculationScreen(
         }
 
         when (selectedTab) {
-            0 -> CalculationContent(calculationViewModel = calculationViewModel)
-            1 -> HistoryScreen(viewModel = calculationViewModel)
+//            0 -> CalculationContent(viewModel = commissionViewModel)
+//            1 -> HistoryScreen(viewModel = commissionViewModel)
         }
     }
 }

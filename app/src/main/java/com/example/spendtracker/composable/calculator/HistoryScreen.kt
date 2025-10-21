@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.spendtracker.model.CalculationResult
+import com.example.spendtracker.ds.entity.CalculationResult
 import com.example.spendtracker.model.CalculationViewModel
 import java.text.SimpleDateFormat
 import java.util.Date

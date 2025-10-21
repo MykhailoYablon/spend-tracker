@@ -1,11 +1,11 @@
-package com.example.spendtracker.dao
+package com.example.spendtracker.ds.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.spendtracker.model.Investment
+import com.example.spendtracker.ds.entity.Investment
 import kotlinx.coroutines.flow.Flow
 
 @Dao
