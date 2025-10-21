@@ -91,7 +91,7 @@ fun InvestmentSpendingCarousel(
                 .padding(AppConstants.DEFAULT_PADDING.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            repeat(3) { index ->
+            repeat(2) { index ->
                 Box(
                     modifier = Modifier
                         .size(AppConstants.PAGE_INDICATOR_SIZE.dp)

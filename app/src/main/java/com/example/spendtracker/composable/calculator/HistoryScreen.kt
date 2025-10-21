@@ -13,11 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.TextButton
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
@@ -51,23 +49,7 @@ fun HistoryScreen(
     val calculations by viewModel.allCalculations.collectAsState(initial = emptyList())
     var showDeleteAllDialog by remember { mutableStateOf(false) }
 
-    Scaffold(
-//        topBar = {
-//            TopAppBar(
-//                title = { Text("History") },
-//                actions = {
-//                    if (calculations.isNotEmpty()) {
-//                        IconButton(onClick = { showDeleteAllDialog = true }) {
-//                            Icon(
-//                                imageVector = Icons.Default.Delete,
-//                                contentDescription = "Clear History"
-//                            )
-//                        }
-//                    }
-//                }
-//            )
-//        }
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
         if (calculations.isEmpty()) {
             Box(
                 modifier = Modifier
@@ -153,11 +135,48 @@ fun CalculationCard(
 
             Text(
                 text = buildAnnotatedString {
-                    append(String.format(Locale.getDefault(), "Theoretical Future Value: %.2f\n", calculation.theoreticalFutureValue))
-                    append(String.format(Locale.getDefault(), "Bank return: %.2f\n", calculation.bankReturn))
-                    append(String.format(Locale.getDefault(), "Real return: %.2f\n", calculation.realReturn))
-                    append(String.format(Locale.getDefault(), "Bank commission: %.2f\n", calculation.bankCommission))
-                    append(String.format(Locale.getDefault(), "Real %% (with commission): %.2f%%", calculation.realPercentage))
+                    append(
+                        String.format(
+                            Locale.getDefault(),
+                            "Theoretical Future Value: %.2f\n",
+                            calculation.theoreticalFutureValue
+                        )
+                    )
+                    append(
+                        String.format(
+                            Locale.getDefault(),
+                            "Bank return: %.2f\n",
+                            calculation.bankReturn
+                        )
+                    )
+                    append(
+                        String.format(
+                            Locale.getDefault(),
+                            "Real return: %.2f\n",
+                            calculation.realReturn
+                        )
+                    )
+                    append(
+                        String.format(
+                            Locale.getDefault(),
+                            "Bank commission: %.2f\n",
+                            calculation.bankCommission
+                        )
+                    )
+                    append(
+                        String.format(
+                            Locale.getDefault(),
+                            "Real %% (with commission): %.2f%%\n",
+                            calculation.realPercentage
+                        )
+                    )
+                    append(
+                        String.format(
+                            Locale.getDefault(),
+                            "Return Date: %s",
+                            calculation.returnDate
+                        )
+                    )
                 },
                 style = MaterialTheme.typography.bodyMedium,
                 fontFamily = FontFamily.Monospace

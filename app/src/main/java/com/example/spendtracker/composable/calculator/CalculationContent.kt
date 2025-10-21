@@ -31,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spendtracker.model.CalculationResult
@@ -51,7 +50,7 @@ fun CalculationContent(
     var purchasePriceText by remember { mutableStateOf("1000") }
     var couponRateText by remember { mutableStateOf("17") }
     var bankReturnText by remember { mutableStateOf("1170") }
-    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+    var selectedDate by remember { mutableStateOf<LocalDate?>(LocalDate.now().plusYears(1)) }
     var showDatePicker by remember { mutableStateOf(false) }
     var resultText by remember { mutableStateOf<String?>(null) }
 
@@ -66,17 +65,20 @@ fun CalculationContent(
         val price = purchasePriceText.replace(',', '.').toDoubleOrNull()
         val couponRate = couponRateText.replace(',', '.').toDoubleOrNull()
         val bankReturn = bankReturnText.replace(',', '.').toDoubleOrNull()
-        val date = selectedDate
-        if (price == null || couponRate == null || date == null || bankReturn == null) {
+        val returnDate = selectedDate
+        if (price == null || couponRate == null || returnDate == null || bankReturn == null) {
             resultText = "Please enter valid price, yield, bank return, and date."
             return
         }
         val today = LocalDate.now()
-        val days = ChronoUnit.DAYS.between(today, date).coerceAtLeast(0)
-        val years = days / 365.25
+        val days = ChronoUnit.DAYS.between(today, returnDate).coerceAtLeast(0)
+        val years = days / 365.00
         val theoreticalFutureValue = price * (1.0 + (couponRate / 100.0)).pow(years)
         val realReturn = bankReturn - price
-        val bankCommission = theoreticalFutureValue - bankReturn
+        var bankCommission = 0.0
+        if (theoreticalFutureValue - bankReturn > 0) {
+            bankCommission = theoreticalFutureValue - bankReturn
+        } else bankCommission = 0.0
         val realPercentage = if (years > 0.0) {
             (((bankReturn / price).pow(1.0 / years) - 1.0) * 100.0)
         } else {
@@ -108,6 +110,7 @@ fun CalculationContent(
             bankReturn = bankReturn,
             realReturn = realReturn,
             bankCommission = bankCommission,
+            returnDate = returnDate,
             realPercentage = realPercentage
         )
         calculationViewModel.add(calculationResult)

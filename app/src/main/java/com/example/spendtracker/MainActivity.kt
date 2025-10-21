@@ -15,7 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.room.Room
 import com.example.spendtracker.composable.InvestmentTrackerApp
 import com.example.spendtracker.ds.AppDatabase
 import com.example.spendtracker.model.CalculationViewModel
@@ -27,11 +26,7 @@ import com.example.spendtracker.repository.Repository
 class MainActivity : ComponentActivity() {
 
     private val database by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "investment_tracker_db"
-        ).build()
+        AppDatabase.getDatabase(this)
     }
 
     private val repository by lazy {
