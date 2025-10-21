@@ -13,6 +13,9 @@ interface CalculationDao {
     @Query("SELECT * FROM calculations ORDER BY timestamp DESC")
     fun getAll(): Flow<List<CalculationResult>>
 
+    @Query("SELECT * FROM calculations ORDER BY timestamp DESC")
+    suspend fun getAllCalculations(): List<CalculationResult>
+
     @Insert
     suspend fun insert(calculationResult: CalculationResult)
 

@@ -8,6 +8,8 @@ class CalculationRepository(private val calculationDao: CalculationDao) {
 
     fun getAll(): Flow<List<CalculationResult>> = calculationDao.getAll()
 
+    suspend fun getAllCalculations(): List<CalculationResult> = calculationDao.getAllCalculations()
+
     suspend fun insert(calculationResult: CalculationResult) = calculationDao.insert(calculationResult)
 
     suspend fun delete(calculationResult: CalculationResult) = calculationDao.delete(calculationResult)
