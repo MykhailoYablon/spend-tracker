@@ -26,8 +26,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import com.example.spendtracker.composable.calculator.CalculationScreen
-import com.example.spendtracker.composable.calculator.TransferCommissionScreen
+import com.example.spendtracker.composable.calculator.bond.CalculationScreen
+import com.example.spendtracker.composable.calculator.commission.TransferCommissionScreen
 import com.example.spendtracker.composable.graph.GraphsScreen
 import com.example.spendtracker.ds.entity.Investment
 import com.example.spendtracker.ds.entity.Spending

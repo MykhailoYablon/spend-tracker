@@ -1,5 +1,6 @@
-package com.example.spendtracker.composable.calculator
+package com.example.spendtracker.composable.calculator.bond
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,32 +14,51 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.example.spendtracker.model.CommissionViewModel
+import com.example.spendtracker.model.CalculationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransferCommissionScreen(commissionViewModel: CommissionViewModel) {
-
+fun CalculationScreen(
+    calculationViewModel: CalculationViewModel
+) {
+    val context = LocalContext.current
+    val exportUri by calculationViewModel.exportEvent.observeAsState()
     var selectedTab by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Commissions", "History")
+    val tabs = listOf("Calculation", "History")
+
+
+    LaunchedEffect(exportUri) {
+        exportUri?.let { uri ->
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/csv"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            context.startActivity(Intent.createChooser(shareIntent, "Export Calculations"))
+            calculationViewModel.onExportHandled()
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
 
         Spacer(modifier = Modifier.height(18.dp))
         // Header
         Text(
-            text = "INVESTMENT COMMISSIONS CALCULATOR",
+            text = "BOND RETURN CALCULATOR",
             style = MaterialTheme.typography.headlineSmall,
             color = Color.White,
             modifier = Modifier.fillMaxWidth(),
@@ -50,7 +70,7 @@ fun TransferCommissionScreen(commissionViewModel: CommissionViewModel) {
 
         TabRow(
             selectedTabIndex = selectedTab,
-            containerColor = Color(0xFF3AAB3E),
+            containerColor = Color(0xFF4A90E2),
 //            divider = VerticalDivider(modifier = Modifier.fillMaxSize()),
             modifier = Modifier
                 .padding(5.dp)
@@ -75,8 +95,8 @@ fun TransferCommissionScreen(commissionViewModel: CommissionViewModel) {
         }
 
         when (selectedTab) {
-//            0 -> CalculationContent(viewModel = commissionViewModel)
-//            1 -> HistoryScreen(viewModel = commissionViewModel)
+            0 -> CalculationContent(calculationViewModel = calculationViewModel)
+            1 -> HistoryScreen(viewModel = calculationViewModel)
         }
     }
 }
