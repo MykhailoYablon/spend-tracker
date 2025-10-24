@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
 import com.example.spendtracker.ds.entity.CalculationResult
+import com.example.spendtracker.ds.entity.FundDepositResult
 import java.io.File
 import java.io.FileWriter
 import java.time.format.DateTimeFormatter
@@ -60,4 +61,45 @@ class CsvExporter(private val context: Context) {
         }
         context.startActivity(Intent.createChooser(shareIntent, "Export Calculations"))
     }
+
+    fun exportFundDepositsToCSV(fundDeposits: List<FundDepositResult>): Uri? {
+        if (fundDeposits.isEmpty()) return null
+
+        return try {
+            val csvFile = createFundDepositCSVFile(fundDeposits)
+            FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",
+                csvFile
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun createFundDepositCSVFile(fundDeposits: List<FundDepositResult>): File {
+        val fileName = "fundDeposits_export_${System.currentTimeMillis()}.csv"
+        val file = File(context.cacheDir, fileName)
+
+        FileWriter(file).use { writer ->
+            // Write header
+            writer.append("ID,Initial Amount,Exchange Rate,Bank Commissions,Final Amount,Transaction Date,Timestamp\n")
+
+            // Write data rows
+            val dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE
+            fundDeposits.forEach { calc ->
+                writer.append("${calc.id},")
+                writer.append("${calc.initialAmount},")
+                writer.append("${calc.exchangeRate},")
+                writer.append("${calc.commissions},")
+                writer.append("${calc.finalAmount},")
+                writer.append("${calc.transactionDate?.format(dateFormatter) ?: ""},")
+                writer.append("${calc.timestamp}\n")
+            }
+        }
+
+        return file
+    }
+
 }

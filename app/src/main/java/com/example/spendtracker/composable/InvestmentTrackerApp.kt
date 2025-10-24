@@ -27,12 +27,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import com.example.spendtracker.composable.calculator.bond.CalculationScreen
-import com.example.spendtracker.composable.calculator.commission.TransferCommissionScreen
+import com.example.spendtracker.composable.calculator.funds.FundDepositScreen
 import com.example.spendtracker.composable.graph.GraphsScreen
 import com.example.spendtracker.ds.entity.Investment
 import com.example.spendtracker.ds.entity.Spending
 import com.example.spendtracker.model.CalculationViewModel
-import com.example.spendtracker.model.CommissionViewModel
+import com.example.spendtracker.model.FundDepositViewModel
 import com.example.spendtracker.model.InvestmentViewModel
 import com.example.spendtracker.model.SpendingViewModel
 
@@ -42,7 +42,7 @@ fun InvestmentTrackerApp(
     investmentViewModel: InvestmentViewModel,
     spendingViewModel: SpendingViewModel,
     calculationViewModel: CalculationViewModel,
-    commissionViewModel: CommissionViewModel
+    fundDepositViewModel: FundDepositViewModel
 ) {
     var selectedBottomTab by remember { mutableIntStateOf(0) }
     var showInvestmentGraphs by remember { mutableStateOf(false) }
@@ -114,7 +114,7 @@ fun InvestmentTrackerApp(
 
                 when (selectedBottomTab) {
                     0 -> CalculationScreen(calculationViewModel)
-                    1 -> TransferCommissionScreen(commissionViewModel)
+                    1 -> FundDepositScreen(fundDepositViewModel)
                     2 -> InvestmentSpendingCarousel(
                         investmentViewModel = investmentViewModel,
                         spendingViewModel = spendingViewModel,

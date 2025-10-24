@@ -1,4 +1,4 @@
-package com.example.spendtracker.composable.calculator.commission
+package com.example.spendtracker.composable.calculator.funds
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -42,18 +42,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spendtracker.composable.calculator.SplitInputField
-import com.example.spendtracker.model.CommissionViewModel
+import com.example.spendtracker.ds.entity.FundDepositResult
+import com.example.spendtracker.model.FundDepositViewModel
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.temporal.ChronoUnit
 import java.util.Locale
-import kotlin.math.pow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CommissionContent(
-    viewModel: CommissionViewModel
+fun FundDepositContent(
+    viewModel: FundDepositViewModel
 ) {
     var valueText by remember { mutableStateOf("1000") }
     var exchange by remember { mutableStateOf("41.1999") }
@@ -62,7 +61,7 @@ fun CommissionContent(
 
     var bankCommissionsList by remember { mutableStateOf(listOf("")) }
 
-    var transactionDate by remember { mutableStateOf<LocalDate?>(null) }
+    var transactionDate by remember { mutableStateOf<LocalDate?>(LocalDate.now()) }
     var showDatePicker by remember { mutableStateOf(false) }
     var resultText by remember { mutableStateOf<String?>(null) }
 
@@ -76,68 +75,49 @@ fun CommissionContent(
     }
 
     fun calculate() {
-        val price = valueText.replace(',', '.').toDoubleOrNull()
-        val couponRate = exchange.replace(',', '.').toDoubleOrNull()
-        val bankReturn = bankCommissions.replace(',', '.').toDoubleOrNull()
-        val returnDate = transactionDate
-        if (price == null || couponRate == null || returnDate == null || bankReturn == null) {
-            resultText = "Please enter valid price, yield, bank return, and date."
-            return
-        }
-
+        val initialAmount = valueText.replace(',', '.').toDoubleOrNull()
+        val exchangeRate = exchange.replace(',', '.').toDoubleOrNull()
+        val finalAmount = brokerAmount.replace(',', '.').toDoubleOrNull()
         // Parse and sum all bank commissions
         val commissions = bankCommissionsList
             .mapNotNull { it.replace(',', '.').toDoubleOrNull() }
         val totalCommissions = commissions.sum()
 
-
-        bankCommissions = commissions.joinToString(",")
-
-
-        val today = LocalDate.now()
-        val days = ChronoUnit.DAYS.between(today, returnDate).coerceAtLeast(0)
-        val years = days / 365.00
-        val theoreticalFutureValue = price * (1.0 + (couponRate / 100.0)).pow(years)
-        val realReturn = bankReturn - price
-        var bankCommission = 0.0
-        if (theoreticalFutureValue - bankReturn > 0) {
-            bankCommission = theoreticalFutureValue - bankReturn
-        } else bankCommission = 0.0
-        val realPercentage = if (years > 0.0) {
-            (((bankReturn / price).pow(1.0 / years) - 1.0) * 100.0)
-        } else {
-            ((realReturn / price) * 100.0)
+        if (initialAmount == null || exchangeRate == null || transactionDate == null ||
+            finalAmount == null || commissions.isEmpty()) {
+            resultText = "Please enter valid price, yield, bank return, and date."
+            return
         }
+
         resultText = buildString {
             append(
                 String.format(
                     Locale.getDefault(),
-                    "Theoretical Future Value: %.2f\n",
-                    theoreticalFutureValue
+                    "Final Broker Amount Received: %.2f\n",
+                    finalAmount
                 )
             )
-            append(String.format(Locale.getDefault(), "Bank return: %.2f\n", bankReturn))
-            append(String.format(Locale.getDefault(), "Real return: %.2f\n", realReturn))
-            append(String.format(Locale.getDefault(), "Bank commission: %.2f\n", bankCommission))
+            append(String.format(Locale.getDefault(), "Initial Amount: %.2f\n", initialAmount))
+            append(String.format(Locale.getDefault(), "Exchange Rate: %.5f\n", exchangeRate))
+            append(String.format(Locale.getDefault(), "Bank commission: %.2f\n", totalCommissions))
             append(
                 String.format(
                     Locale.getDefault(),
-                    "Real %% (with commission): %.2f%%",
-                    realPercentage
+                    "Final Amount: %.2f\n",
+                    finalAmount
                 )
             )
         }
 
         // Save to database
-//        val calculationResult = CalculationResult(
-//            theoreticalFutureValue = theoreticalFutureValue,
-//            bankReturn = bankReturn,
-//            realReturn = realReturn,
-//            bankCommission = bankCommission,
-//            returnDate = returnDate,
-//            realPercentage = realPercentage
-//        )
-//        viewModel.add(calculationResult)
+        val fundDepositResult = FundDepositResult(
+            initialAmount = initialAmount,
+            exchangeRate = exchangeRate,
+            commissions = commissions.joinToString(","),
+            finalAmount = finalAmount,
+            transactionDate = transactionDate
+        )
+        viewModel.add(fundDepositResult)
     }
 
     if (showDatePicker) {
@@ -279,7 +259,7 @@ fun CommissionContent(
             )
         ) {
             Text(
-                text = "CALCULATE INVESTMENT",
+                text = "CALCULATE COMMISSIONS",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = Color.White

@@ -5,19 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.spendtracker.ds.dao.CalculationDao
-import com.example.spendtracker.ds.dao.CommissionDao
+import com.example.spendtracker.ds.dao.FundDepositDao
 import com.example.spendtracker.ds.dao.InvestmentDao
 import com.example.spendtracker.ds.dao.SpendingDao
 import com.example.spendtracker.ds.entity.CalculationResult
-import com.example.spendtracker.ds.entity.Commission
+import com.example.spendtracker.ds.entity.FundDepositResult
 import com.example.spendtracker.ds.entity.Investment
 import com.example.spendtracker.ds.entity.Spending
 
 @Database(
-    entities = [Investment::class, Spending::class, CalculationResult::class, Commission::class],
+    entities = [Investment::class, Spending::class, CalculationResult::class, FundDepositResult::class],
     version = 2,
     exportSchema = false
 )
@@ -27,7 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun calculationDao(): CalculationDao
     abstract fun investmentDao(): InvestmentDao
     abstract fun spendingDao(): SpendingDao
-    abstract fun commissionDao(): CommissionDao
+    abstract fun fundDepositDao(): FundDepositDao
 
     companion object {
         @Volatile

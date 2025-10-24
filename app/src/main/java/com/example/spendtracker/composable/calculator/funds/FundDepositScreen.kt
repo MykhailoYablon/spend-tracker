@@ -1,4 +1,4 @@
-package com.example.spendtracker.composable.calculator.commission
+package com.example.spendtracker.composable.calculator.funds
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,21 +24,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.example.spendtracker.model.CommissionViewModel
+import com.example.spendtracker.model.FundDepositViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransferCommissionScreen(commissionViewModel: CommissionViewModel) {
+fun FundDepositScreen(fundDepositViewModel: FundDepositViewModel) {
 
     var selectedTab by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Commissions", "History")
+    val tabs = listOf("Deposits", "History")
 
     Column(modifier = Modifier.fillMaxSize()) {
 
         Spacer(modifier = Modifier.height(18.dp))
         // Header
         Text(
-            text = "INVESTMENT COMMISSIONS CALCULATOR",
+            text = "FUNDS DEPOSITS",
             style = MaterialTheme.typography.headlineSmall,
             color = Color.White,
             modifier = Modifier.fillMaxWidth(),
@@ -75,8 +75,8 @@ fun TransferCommissionScreen(commissionViewModel: CommissionViewModel) {
         }
 
         when (selectedTab) {
-            0 -> CommissionContent(viewModel = commissionViewModel)
-//            1 -> HistoryScreen(viewModel = commissionViewModel)
+            0 -> FundDepositContent(viewModel = fundDepositViewModel)
+            1 -> FundDepositHistoryScreen(viewModel = fundDepositViewModel)
         }
     }
 }
