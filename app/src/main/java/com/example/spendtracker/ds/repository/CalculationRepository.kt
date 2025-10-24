@@ -1,12 +1,14 @@
-package com.example.spendtracker.repository
+package com.example.spendtracker.ds.repository
 
-import com.example.spendtracker.dao.CalculationDao
-import com.example.spendtracker.model.CalculationResult
+import com.example.spendtracker.ds.dao.CalculationDao
+import com.example.spendtracker.ds.entity.CalculationResult
 import kotlinx.coroutines.flow.Flow
 
 class CalculationRepository(private val calculationDao: CalculationDao) {
 
     fun getAll(): Flow<List<CalculationResult>> = calculationDao.getAll()
+
+    suspend fun getAllCalculations(): List<CalculationResult> = calculationDao.getAllCalculations()
 
     suspend fun insert(calculationResult: CalculationResult) = calculationDao.insert(calculationResult)
 

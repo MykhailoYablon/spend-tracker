@@ -6,23 +6,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spendtracker.ds.entity.CalculationResult
-import com.example.spendtracker.ds.repository.CalculationRepository
+import com.example.spendtracker.ds.entity.FundDepositResult
+import com.example.spendtracker.ds.repository.FundDepositRepository
 import com.example.spendtracker.service.CsvExporter
 import kotlinx.coroutines.launch
 
-class CalculationViewModel(private val repository: CalculationRepository) : ViewModel() {
-    val allCalculations = repository.getAll()
+class FundDepositViewModel(private val repository: FundDepositRepository) : ViewModel() {
 
-    fun add(calculationResult: CalculationResult) {
+    val allFundDeposits = repository.getAll()
+
+    fun add(fundDepositResult: FundDepositResult) {
         viewModelScope.launch {
-            repository.insert(calculationResult)
+            repository.insert(fundDepositResult)
         }
     }
 
-    fun delete(calculationResult: CalculationResult) {
+    fun delete(fundDepositResult: FundDepositResult) {
         viewModelScope.launch {
-            repository.delete(calculationResult)
+            repository.delete(fundDepositResult)
         }
     }
 
@@ -38,9 +39,9 @@ class CalculationViewModel(private val repository: CalculationRepository) : View
     fun exportCalculations(context: Context) {
         viewModelScope.launch {
             try {
-                val calculations = repository.getAllCalculations()
+                val calculations = repository.getAllFundDeposits()
                 val csvExporter = CsvExporter(context)
-                val uri = csvExporter.exportCalculationsToCSV(calculations)
+                val uri = csvExporter.exportFundDepositsToCSV(calculations)
                 _exportEvent.value = uri
             } catch (e: Exception) {
                 e.printStackTrace()

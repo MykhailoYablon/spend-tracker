@@ -1,7 +1,8 @@
-package com.example.spendtracker.model
+package com.example.spendtracker.ds.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDate
 
 @Entity(tableName = "calculations")
 data class CalculationResult(
@@ -12,5 +13,6 @@ data class CalculationResult(
     val realReturn: Double,
     val bankCommission: Double,
     val realPercentage: Double,
+    val returnDate: LocalDate?,
     val timestamp: Long = System.currentTimeMillis()
 )

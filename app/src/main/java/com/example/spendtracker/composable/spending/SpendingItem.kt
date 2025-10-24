@@ -19,7 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.spendtracker.model.Spending
+import com.example.spendtracker.ds.entity.Spending
 import com.example.spendtracker.util.AppConstants
 import java.text.SimpleDateFormat
 import java.util.Date

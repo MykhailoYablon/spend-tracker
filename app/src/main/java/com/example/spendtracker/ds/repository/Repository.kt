@@ -1,10 +1,9 @@
-package com.example.spendtracker.repository
+package com.example.spendtracker.ds.repository
 
-import androidx.room.Update
-import com.example.spendtracker.dao.InvestmentDao
-import com.example.spendtracker.dao.SpendingDao
-import com.example.spendtracker.model.Investment
-import com.example.spendtracker.model.Spending
+import com.example.spendtracker.ds.dao.InvestmentDao
+import com.example.spendtracker.ds.dao.SpendingDao
+import com.example.spendtracker.ds.entity.Investment
+import com.example.spendtracker.ds.entity.Spending
 import kotlinx.coroutines.flow.Flow
 
 class Repository(

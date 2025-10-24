@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.spendtracker.model.Investment
+import com.example.spendtracker.ds.entity.Investment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

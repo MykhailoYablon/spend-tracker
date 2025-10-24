@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.example.spendtracker.composable.getSharedGradient
 import com.example.spendtracker.enums.ChartType
 import com.example.spendtracker.enums.SortOption
-import com.example.spendtracker.model.Spending
+import com.example.spendtracker.ds.entity.Spending
 
 
 @OptIn(ExperimentalMaterial3Api::class)

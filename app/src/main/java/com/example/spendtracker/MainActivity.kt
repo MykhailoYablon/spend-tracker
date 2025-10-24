@@ -15,23 +15,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.room.Room
 import com.example.spendtracker.composable.InvestmentTrackerApp
 import com.example.spendtracker.ds.AppDatabase
 import com.example.spendtracker.model.CalculationViewModel
 import com.example.spendtracker.model.InvestmentViewModel
 import com.example.spendtracker.model.SpendingViewModel
-import com.example.spendtracker.repository.CalculationRepository
-import com.example.spendtracker.repository.Repository
+import com.example.spendtracker.ds.repository.CalculationRepository
+import com.example.spendtracker.ds.repository.FundDepositRepository
+import com.example.spendtracker.ds.repository.Repository
+import com.example.spendtracker.model.FundDepositViewModel
 
 class MainActivity : ComponentActivity() {
 
     private val database by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "investment_tracker_db"
-        ).build()
+        AppDatabase.getDatabase(this)
     }
 
     private val repository by lazy {
@@ -40,6 +37,10 @@ class MainActivity : ComponentActivity() {
 
     private val calculationRepository by lazy {
         CalculationRepository(database.calculationDao())
+    }
+
+    private val fundDepositRepository by lazy {
+        FundDepositRepository(database.fundDepositDao())
     }
 
     private val investmentViewModel by lazy {
@@ -52,6 +53,9 @@ class MainActivity : ComponentActivity() {
 
     private val calculationViewModel by lazy {
         CalculationViewModel(calculationRepository)
+    }
+    private val fundDepositViewModel by lazy {
+        FundDepositViewModel(fundDepositRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +73,8 @@ class MainActivity : ComponentActivity() {
                     InvestmentTrackerApp(
                         investmentViewModel = investmentViewModel,
                         spendingViewModel = spendingViewModel,
-                        calculationViewModel = calculationViewModel
+                        calculationViewModel = calculationViewModel,
+                        fundDepositViewModel = fundDepositViewModel
                     )
                 }
             }

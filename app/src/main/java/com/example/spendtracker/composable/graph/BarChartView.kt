@@ -8,7 +8,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.spendtracker.enums.SortOption
 import com.example.spendtracker.model.Graph
-import com.example.spendtracker.model.Investment
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData

@@ -20,7 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.spendtracker.model.Investment
+import com.example.spendtracker.ds.entity.Investment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

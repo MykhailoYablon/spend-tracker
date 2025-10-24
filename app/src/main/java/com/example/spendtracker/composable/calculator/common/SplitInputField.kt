@@ -1,4 +1,4 @@
-package com.example.spendtracker.composable.calculator
+package com.example.spendtracker.composable.calculator.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
