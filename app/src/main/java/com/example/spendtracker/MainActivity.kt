@@ -17,13 +17,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.example.spendtracker.composable.InvestmentTrackerApp
 import com.example.spendtracker.ds.AppDatabase
-import com.example.spendtracker.model.CalculationViewModel
-import com.example.spendtracker.model.InvestmentViewModel
-import com.example.spendtracker.model.SpendingViewModel
 import com.example.spendtracker.ds.repository.CalculationRepository
 import com.example.spendtracker.ds.repository.FundDepositRepository
 import com.example.spendtracker.ds.repository.Repository
+import com.example.spendtracker.model.CalculationViewModel
 import com.example.spendtracker.model.FundDepositViewModel
+import com.example.spendtracker.model.InvestmentViewModel
+import com.example.spendtracker.model.SpendingViewModel
 
 class MainActivity : ComponentActivity() {
 
