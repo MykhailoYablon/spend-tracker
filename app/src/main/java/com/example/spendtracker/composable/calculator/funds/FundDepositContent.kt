@@ -41,7 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.spendtracker.composable.calculator.SplitInputField
+import com.example.spendtracker.composable.calculator.common.SplitInputField
 import com.example.spendtracker.ds.entity.FundDepositResult
 import com.example.spendtracker.model.FundDepositViewModel
 import java.time.Instant
@@ -56,10 +56,9 @@ fun FundDepositContent(
 ) {
     var valueText by remember { mutableStateOf("1000") }
     var exchange by remember { mutableStateOf("41.1999") }
-    var bankCommissions by remember { mutableStateOf("10") }
     var brokerAmount by remember { mutableStateOf("990") }
 
-    var bankCommissionsList by remember { mutableStateOf(listOf("")) }
+    var bankCommissionsList by remember { mutableStateOf(listOf("0")) }
 
     var transactionDate by remember { mutableStateOf<LocalDate?>(LocalDate.now()) }
     var showDatePicker by remember { mutableStateOf(false) }
@@ -259,7 +258,7 @@ fun FundDepositContent(
             )
         ) {
             Text(
-                text = "CALCULATE COMMISSIONS",
+                text = "ADD FUND DEPOSIT",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = Color.White

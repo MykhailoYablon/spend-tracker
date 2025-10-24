@@ -81,14 +81,14 @@ fun InvestmentTrackerApp(
                     NavigationBarItem(
                         selected = selectedBottomTab == 0,
                         onClick = { selectedBottomTab = 0 },
-                        icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                        label = { Text("Home") }
+                        icon = { Icon(Icons.Default.Home, contentDescription = "Fund Deposits") },
+                        label = { Text("Fund Deposits") }
                     )
                     NavigationBarItem(
                         selected = selectedBottomTab == 1,
                         onClick = { selectedBottomTab = 1 },
-                        icon = { Icon(Icons.Default.Favorite, contentDescription = "Favorites") },
-                        label = { Text("Favorites") }
+                        icon = { Icon(Icons.Default.Favorite, contentDescription = "Bonds") },
+                        label = { Text("Bonds") }
                     )
                     NavigationBarItem(
                         selected = selectedBottomTab == 2,
@@ -113,8 +113,8 @@ fun InvestmentTrackerApp(
             ) {
 
                 when (selectedBottomTab) {
-                    0 -> CalculationScreen(calculationViewModel)
-                    1 -> FundDepositScreen(fundDepositViewModel)
+                    0 -> FundDepositScreen(fundDepositViewModel)
+                    1 -> CalculationScreen(calculationViewModel)
                     2 -> InvestmentSpendingCarousel(
                         investmentViewModel = investmentViewModel,
                         spendingViewModel = spendingViewModel,

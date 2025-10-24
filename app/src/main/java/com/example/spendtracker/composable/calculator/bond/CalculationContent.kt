@@ -33,7 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.spendtracker.composable.calculator.SplitInputField
+import com.example.spendtracker.composable.calculator.common.SplitInputField
 import com.example.spendtracker.ds.entity.CalculationResult
 import com.example.spendtracker.model.CalculationViewModel
 import java.time.Instant

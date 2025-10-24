@@ -39,8 +39,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
-import com.example.spendtracker.composable.calculator.bond.DeleteAllDialog
+import com.example.spendtracker.composable.calculator.common.DeleteAllDialog
+import com.example.spendtracker.composable.calculator.common.HistoryCard
 import com.example.spendtracker.ds.entity.FundDepositResult
 import com.example.spendtracker.model.FundDepositViewModel
 import java.text.SimpleDateFormat
@@ -129,85 +129,56 @@ fun FundDepositHistoryScreen(viewModel: FundDepositViewModel) {
     }
 }
 
+// Now use it like this:
 @Composable
 fun FundDepositCard(
     fundDepositResult: FundDepositResult,
     onDelete: () -> Unit
 ) {
-    val dateFormat = remember { SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()) }
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    HistoryCard(
+        timestamp = fundDepositResult.timestamp,
+        onDelete = onDelete
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = dateFormat.format(Date(fundDepositResult.timestamp)),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+        Text(
+            text = buildAnnotatedString {
+                append(
+                    String.format(
+                        Locale.getDefault(),
+                        "Initial Amount: %.2f\n",
+                        fundDepositResult.initialAmount
+                    )
                 )
-
-                IconButton(onClick = onDelete) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete",
-                        tint = MaterialTheme.colorScheme.error
+                append(
+                    String.format(
+                        Locale.getDefault(),
+                        "Exchange Rate: %.5f\n",
+                        fundDepositResult.exchangeRate
                     )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = buildAnnotatedString {
-                    append(
-                        String.format(
-                            Locale.getDefault(),
-                            "Initial Amount: %.2f\n",
-                            fundDepositResult.initialAmount
-                        )
+                )
+                append(
+                    String.format(
+                        Locale.getDefault(),
+                        "Bank commissions: %s\n",
+                        fundDepositResult.commissions
                     )
-                    append(
-                        String.format(
-                            Locale.getDefault(),
-                            "Exchange Rate: %.5f\n",
-                            fundDepositResult.exchangeRate
-                        )
+                )
+                append(
+                    String.format(
+                        Locale.getDefault(),
+                        "Final Amount: %.2f\n",
+                        fundDepositResult.finalAmount
                     )
-                    append(
-                        String.format(
-                            Locale.getDefault(),
-                            "Bank commissions: %s\n",
-                            fundDepositResult.commissions
-                        )
+                )
+                append(
+                    String.format(
+                        Locale.getDefault(),
+                        "Transaction Date: %s",
+                        fundDepositResult.transactionDate
                     )
-                    append(
-                        String.format(
-                            Locale.getDefault(),
-                            "Final Amount: %.2f\n",
-                            fundDepositResult.finalAmount
-                        )
-                    )
-                    append(
-                        String.format(
-                            Locale.getDefault(),
-                            "Transaction Date: %s",
-                            fundDepositResult.transactionDate
-                        )
-                    )
-                },
-                style = MaterialTheme.typography.bodyMedium,
-                fontFamily = FontFamily.Monospace
-            )
-        }
+                )
+            },
+            style = MaterialTheme.typography.bodyMedium,
+            fontFamily = FontFamily.Monospace
+        )
     }
 }
