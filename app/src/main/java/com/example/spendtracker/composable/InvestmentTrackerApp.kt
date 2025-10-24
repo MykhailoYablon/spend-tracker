@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.example.spendtracker.composable.calculator.bond.CalculationScreen
 import com.example.spendtracker.composable.calculator.funds.FundDepositScreen
 import com.example.spendtracker.composable.graph.GraphsScreen
@@ -76,6 +77,7 @@ fun InvestmentTrackerApp(
     } else {
         Scaffold(
             containerColor = Color.Transparent,
+            modifier = Modifier.padding(top = 30.dp),
             bottomBar = {
                 NavigationBar {
                     NavigationBarItem(
