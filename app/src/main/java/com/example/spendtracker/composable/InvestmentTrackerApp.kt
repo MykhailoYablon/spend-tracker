@@ -1,12 +1,12 @@
 package com.example.spendtracker.composable
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +26,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.spendtracker.R
 import com.example.spendtracker.composable.calculator.bond.CalculationScreen
 import com.example.spendtracker.composable.calculator.funds.FundDepositScreen
 import com.example.spendtracker.composable.graph.GraphsScreen
@@ -83,25 +86,66 @@ fun InvestmentTrackerApp(
                     NavigationBarItem(
                         selected = selectedBottomTab == 0,
                         onClick = { selectedBottomTab = 0 },
-                        icon = { Icon(Icons.Default.Home, contentDescription = "Fund Deposits") },
+                        icon = {
+                            Image(
+                                painter = painterResource(id = R.drawable.deposit),
+                                contentDescription = "Fund Deposits",
+                                modifier = Modifier.size(24.dp),
+                                colorFilter = ColorFilter.tint(
+                                    if (selectedBottomTab == 0)
+                                        Color(0xFF3AAB3E)
+                                    else
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            )
+                        },
                         label = { Text("Fund Deposits") }
                     )
                     NavigationBarItem(
                         selected = selectedBottomTab == 1,
                         onClick = { selectedBottomTab = 1 },
-                        icon = { Icon(Icons.Default.Favorite, contentDescription = "Bonds") },
+                        icon = {
+                            Image(
+                                painter = painterResource(id = R.drawable.bond),
+                                contentDescription = "Bonds",
+                                modifier = Modifier.size(24.dp),
+                                colorFilter = ColorFilter.tint(
+                                    if (selectedBottomTab == 1)
+                                        Color(0xFF4A90E2)
+                                    else
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            )
+//                            Icon(Icons.Default.Favorite, contentDescription = "Bonds")
+                        },
                         label = { Text("Bonds") }
                     )
                     NavigationBarItem(
                         selected = selectedBottomTab == 2,
                         onClick = { selectedBottomTab = 2 },
-                        icon = { Icon(Icons.Filled.Info, contentDescription = "Tracker") },
+                        icon = {
+                            Icon(
+                                Icons.Filled.Info, contentDescription = "Tracker",
+                                tint = if (selectedBottomTab == 2)
+                                    MaterialTheme.colorScheme.primary
+                                else
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
                         label = { Text("Tracker") }
                     )
                     NavigationBarItem(
                         selected = selectedBottomTab == 3,
                         onClick = { selectedBottomTab = 3 },
-                        icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") },
+                        icon = {
+                            Icon(
+                                Icons.Default.Settings, contentDescription = "Settings",
+                                tint = if (selectedBottomTab == 3)
+                                    MaterialTheme.colorScheme.primary
+                                else
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
                         label = { Text("Settings") }
                     )
                 }

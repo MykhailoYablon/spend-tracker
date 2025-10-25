@@ -64,7 +64,7 @@ fun FundDepositScreen(fundDepositViewModel: FundDepositViewModel) {
                             Icon(
                                 imageVector = Icons.Default.Info,
                                 contentDescription = "Information",
-                                tint = MaterialTheme.colorScheme.primary
+                                tint = Color(0xFF3AAB3E)
                             )
                         }
                     }

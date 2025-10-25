@@ -84,7 +84,7 @@ fun CalculationScreen(
                             Icon(
                                 imageVector = Icons.Default.Info,
                                 contentDescription = "Information",
-                                tint = MaterialTheme.colorScheme.primary
+                                tint = Color(0xFF4A90E2)
                             )
                         }
                     }
