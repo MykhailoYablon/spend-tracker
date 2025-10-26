@@ -3,9 +3,10 @@ package com.example.spendtracker.composable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
@@ -53,6 +54,21 @@ fun InvestmentTrackerApp(
     var showSpendingGraphs by remember { mutableStateOf(false) }
     var investments by remember { mutableStateOf(emptyList<Investment>()) }
     var spending by remember { mutableStateOf(emptyList<Spending>()) }
+
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = { 4 } // Number of tabs
+    )
+
+    // Sync pager state with bottom navigation
+    LaunchedEffect(pagerState.currentPage) {
+        selectedBottomTab = pagerState.currentPage
+    }
+
+    // Sync bottom navigation with pager state
+    LaunchedEffect(selectedBottomTab) {
+        pagerState.animateScrollToPage(selectedBottomTab)
+    }
 
     // Collect investments for the graphs
     LaunchedEffect(Unit) {
@@ -151,14 +167,13 @@ fun InvestmentTrackerApp(
                 }
             }
         ) { paddingValues ->
-            Box(
+            HorizontalPager(
+                state = pagerState,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .padding(paddingValues)
-//                    .background(Color.Black)
-            ) {
-
-                when (selectedBottomTab) {
+            ) { page ->
+                when (page) {
                     0 -> FundDepositScreen(fundDepositViewModel)
                     1 -> CalculationScreen(calculationViewModel)
                     2 -> InvestmentSpendingCarousel(
