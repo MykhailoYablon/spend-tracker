@@ -1,5 +1,6 @@
 package com.example.spendtracker.composable.calculator.funds
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,9 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -19,7 +20,9 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -37,9 +41,23 @@ import com.example.spendtracker.model.FundDepositViewModel
 @Composable
 fun FundDepositScreen(fundDepositViewModel: FundDepositViewModel) {
 
+    val context = LocalContext.current
+    val exportUri by fundDepositViewModel.exportEvent.observeAsState()
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("Deposits", "History")
     var showInfoDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(exportUri) {
+        exportUri?.let { uri ->
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/csv"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            context.startActivity(Intent.createChooser(shareIntent, "Export Calculations"))
+            fundDepositViewModel.onExportHandled()
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -64,7 +82,7 @@ fun FundDepositScreen(fundDepositViewModel: FundDepositViewModel) {
                             Icon(
                                 imageVector = Icons.Default.Info,
                                 contentDescription = "Information",
-                                tint = MaterialTheme.colorScheme.primary
+                                tint = Color(0xFF3AAB3E)
                             )
                         }
                     }

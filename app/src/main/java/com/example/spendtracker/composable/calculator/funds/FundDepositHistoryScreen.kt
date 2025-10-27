@@ -77,7 +77,7 @@ fun FundDepositHistoryScreen(viewModel: FundDepositViewModel) {
                             .height(45.dp),
                         shape = RoundedCornerShape(20.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF803BFF)
+                            containerColor = Color(0xFF3A883D)
                         )
                     ) {
                         Text(
